@@ -1,7 +1,6 @@
 package com.chaohu.conner.http.connector;
 
 import com.chaohu.conner.http.Api;
-import com.chaohu.conner.http.connector.AbstractConnector;
 import okhttp3.Request;
 
 /**

@@ -3,7 +3,6 @@ package com.chaohu.conner.http.connector;
 import com.chaohu.conner.enums.FileContentTypeEnum;
 import com.chaohu.conner.exception.HttpException;
 import com.chaohu.conner.http.Api;
-import com.chaohu.conner.http.connector.AbstractConnector;
 import com.chaohu.conner.util.FileUtil;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;

@@ -4,7 +4,6 @@ import com.chaohu.conner.config.HttpConfig;
 import com.chaohu.conner.config.IConfig;
 import com.chaohu.conner.container.IConfigContainer;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
