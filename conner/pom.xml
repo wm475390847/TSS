@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.chaohu</groupId>
-    <artifactId>conner</artifactId>
+    <artifactId>chaohu-conner</artifactId>
+    <name>${project.artifactId}</name>
     <version>1.0-SNAPSHOT</version>
 
     <parent>
         <groupId>com.chaohu</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>chaohu-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -61,38 +61,5 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
-                <configuration>
-                    <attach>true</attach>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
-    <!--将项目打包发送到私有仓库-->
-    <distributionManagement>
-        <repository>
-            <id>private-releases</id>
-            <url>http://116.62.222.54/repository/maven-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>private-snapshots</id>
-            <url>http://116.62.222.54/repository/maven-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>
