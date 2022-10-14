@@ -4,16 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="56b358f4-f49f-41a4-8366-9558c1866ece" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/chaohu/conner/base/BaseCase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="56b358f4-f49f-41a4-8366-9558c1866ece" name="Default Changelist" comment="修改">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/chaohu/conner/AbstractCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/chaohu/conner/AbstractCase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/chaohu/conner/TestA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/chaohu/conner/TestA.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/chaohu/conner/TestO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/chaohu/conner/TestO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/chaohu/conner/container/AContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/chaohu/conner/container/AContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/chaohu/conner/container/OContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/chaohu/conner/container/OContainer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,8 +228,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1665650900023</updated>
-      <workItem from="1665650901711" duration="18398000" />
+      <workItem from="1665650901711" duration="18703000" />
     </task>
+    <task id="LOCAL-00001" summary="修改">
+      <created>1665723542405</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1665723542405</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -252,5 +253,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改" />
   </component>
 </project>
