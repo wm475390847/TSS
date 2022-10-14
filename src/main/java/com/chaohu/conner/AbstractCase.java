@@ -1,7 +1,6 @@
 package com.chaohu.conner;
 
 import com.chaohu.conner.exception.ConnerException;
-import com.chaohu.conner.exception.HttpException;
 import com.chaohu.conner.listener.ExecuteListener;
 import com.chaohu.conner.util.Property;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +23,10 @@ public abstract class AbstractCase {
     private static String IS_ON_DEBUG = "true";
     protected static Properties properties = Property.getInstance().parse();
 
-    public AbstractCase() {
-//        checkEnv("test");
+    public AbstractCase(boolean isCheck) {
+        if (isCheck) {
+            checkEnv("test");
+        }
     }
 
     /**
@@ -33,8 +34,10 @@ public abstract class AbstractCase {
      *
      * @param env 环境
      */
-    public AbstractCase(String env) {
-        checkEnv(env);
+    public AbstractCase(boolean isCheck, String env) {
+        if (isCheck) {
+            checkEnv(env);
+        }
     }
 
     /**
@@ -43,9 +46,11 @@ public abstract class AbstractCase {
      * @param env       环境
      * @param isOnDebug 是否为debug模式
      */
-    public AbstractCase(String env, boolean isOnDebug) {
+    public AbstractCase(boolean isCheck, String env, boolean isOnDebug) {
         IS_ON_DEBUG = String.valueOf(isOnDebug);
-        checkEnv(env);
+        if (isCheck) {
+            checkEnv(env);
+        }
     }
 
     /**
@@ -58,7 +63,7 @@ public abstract class AbstractCase {
         Context.debug = DEBUG;
         Context.isOnDebug = IS_ON_DEBUG;
         String propertiesEnv = properties.getProperty("env");
-        Optional.ofNullable(propertiesEnv).orElseThrow(() -> new HttpException("请在配置文件中配置变量：env=?"));
+        Optional.ofNullable(propertiesEnv).orElseThrow(() -> new ConnerException("请在配置文件中配置变量：env=?"));
         if (DEBUG.equals(IS_ON_DEBUG) && !env.equals(propertiesEnv)) {
             throw new ConnerException("debug模式默认为test环境，如需切换请先修改case父类构造super中env参数");
         }

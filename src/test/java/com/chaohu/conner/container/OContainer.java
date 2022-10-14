@@ -22,7 +22,8 @@ public class OContainer extends AbstractConfigContainer {
         ResponseLog<Response> responseLog = UicLoginApi.builder()
                 .password(password)
                 .account("")
-                .build().execute();
+                .build()
+                .execute();
         JSONObject data = responseLog.getObjResult().getJsonData();
         String token = "_sw_token=" + data.getString("_sw_token");
         HttpConfig httpConfig = new HttpConfig()

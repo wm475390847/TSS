@@ -1,6 +1,7 @@
 package com.chaohu.conner;
 
 import com.chaohu.conner.annotation.Container;
+import com.chaohu.conner.base.BaseCase;
 import com.chaohu.conner.base.ConfigGetAppTopicsPostApi;
 import com.chaohu.conner.container.AContainer;
 import com.chaohu.conner.http.ResponseLog;
@@ -14,7 +15,7 @@ import org.testng.annotations.Test;
  */
 @Slf4j
 @Container(value = AContainer.class)
-public class TestA extends AbstractCase {
+public class TestA extends BaseCase {
 
     @Test
     public void test_3() {

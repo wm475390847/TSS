@@ -2,11 +2,12 @@ package com.chaohu.conner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chaohu.conner.annotation.Container;
+import com.chaohu.conner.base.BaseCase;
 import com.chaohu.conner.container.OContainer;
 import com.chaohu.conner.http.Api;
-import com.chaohu.conner.http.connector.IConnector;
 import com.chaohu.conner.http.MethodEnum;
 import com.chaohu.conner.http.ResponseLog;
+import com.chaohu.conner.http.connector.IConnector;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import org.testng.annotations.Test;
@@ -17,7 +18,7 @@ import org.testng.annotations.Test;
  */
 @Slf4j
 @Container(value = OContainer.class)
-public class TestO extends AbstractCase {
+public class TestO extends BaseCase {
 
     @Test
     public void test_1() {
