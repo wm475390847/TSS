@@ -1,10 +1,10 @@
 package com.chaohu.table.table;
 
+import com.chaohu.table.ContainerConstants;
 import com.chaohu.table.field.IField;
 import com.chaohu.table.field.SimpleField;
 import com.chaohu.table.row.IRow;
 import com.chaohu.table.row.SimpleRow;
-import com.chaohu.table.ContainerConstants;
 import com.opencsv.CSVReader;
 import lombok.Setter;
 import lombok.experimental.Accessors;

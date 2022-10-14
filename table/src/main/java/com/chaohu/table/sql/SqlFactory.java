@@ -14,18 +14,16 @@ import java.io.InputStream;
  *
  * @author wangmin
  */
-public class SqlFactory<T> {
+public class SqlFactory {
     private final String configPath;
-    private final Class<T> tClass;
 
     public SqlFactory(Builder builder) {
         this.configPath = builder.configPath;
-        this.tClass = (Class<T>) builder.tClass;
     }
 
     private SqlSession sqlSession = null;
 
-    public T execute() {
+    public SqlFactory execute() {
         try {
             InputStream inputStream = Resources.getResourceAsStream(configPath);
             SqlSessionManager sqlSessionManager = SqlSessionManager.newInstance(inputStream);
@@ -33,18 +31,24 @@ public class SqlFactory<T> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return sqlSession.getMapper(tClass);
+        return this;
+    }
+
+    public <T extends MyBatisBaseDao<?, ?>> T call(Class<T> t) {
+        return sqlSession.getMapper(t);
     }
 
     @Setter
     @Accessors(chain = true, fluent = true)
     public static class Builder {
 
+        /**
+         * 配置自己的sqlConfiguration.xml
+         */
         private String configPath = "configuration.xml";
-        private Object tClass;
 
-        public SqlFactory<Object> build() {
-            return new SqlFactory<>(this);
+        public SqlFactory build() {
+            return new SqlFactory(this);
         }
     }
 }
