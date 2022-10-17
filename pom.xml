@@ -7,13 +7,14 @@
     <artifactId>chaohu-parent</artifactId>
     <name>chaohu</name>
     <packaging>pom</packaging>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2.1-SNAPSHOT</version>
 
     <modules>
         <module>chaohu-all</module>
         <module>chaohu-table</module>
         <module>chaohu-robot</module>
         <module>chaohu-conner</module>
+        <module>chaohu-generator</module>
     </modules>
 
     <properties>
@@ -109,6 +110,13 @@
                 <groupId>com.opencsv</groupId>
                 <artifactId>opencsv</artifactId>
                 <version>3.9</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>2.3.29</version>
+                <optional>true</optional>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -9,16 +9,11 @@
     <parent>
         <groupId>com.chaohu</groupId>
         <artifactId>chaohu-parent</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.2.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>chaohu-all</artifactId>
     <name>${project.artifactId}</name>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -44,6 +39,11 @@
         <dependency>
             <groupId>com.chaohu</groupId>
             <artifactId>chaohu-robot</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.chaohu</groupId>
+            <artifactId>chaohu-generator</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>

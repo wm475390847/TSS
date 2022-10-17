@@ -1,7 +1,9 @@
 package com.chaohu.conner;
 
+import com.chaohu.conner.config.DingDingConfig;
 import com.chaohu.conner.config.HttpConfig;
 import com.chaohu.conner.config.IConfig;
+import com.chaohu.conner.config.ProductConfig;
 import com.chaohu.conner.container.IConfigContainer;
 
 import java.util.LinkedHashMap;
@@ -43,32 +45,13 @@ public class Context {
     public static String failApi;
 
     /**
-     * 获取http的配置
+     * 获取配置
      *
-     * @return http配置
-     */
-    public static HttpConfig getHttpConfig() {
-        if (map.isEmpty()) {
-            return null;
-        }
-        Harbor harbor = getHarbor(Context.currentExecuteClass);
-        if (harbor == null) {
-            return null;
-        }
-        IConfigContainer configContainer = harbor.getConfigContainer();
-        if (configContainer == null) {
-            return null;
-        }
-        return configContainer.findConfig(HttpConfig.class);
-    }
-
-    /**
-     * 获取配置容器
-     *
+     * @param configClass 需要获取的配置类型{@link DingDingConfig}、{@link HttpConfig}、{@link ProductConfig}
      * @return 配置容器
      */
-    public static <C extends IConfig> C getContainer(Class<C> configClass) {
-        Harbor harbor = getHarbor(configClass);
+    public static <C extends IConfig> C getConfig(Class<C> configClass) {
+        Harbor harbor = getHarbor(currentExecuteClass);
         if (harbor == null) {
             return null;
         }
@@ -82,13 +65,13 @@ public class Context {
     /**
      * 获取harbor
      *
-     * @param clazz 类
+     * @param executeClass 正在执行的类{@link #currentExecuteClass}
      * @return Harbor
      */
-    public static Harbor getHarbor(Class<?> clazz) {
+    public static Harbor getHarbor(Class<?> executeClass) {
         if (map.isEmpty()) {
             return null;
         }
-        return map.get(clazz);
+        return map.get(executeClass);
     }
 }

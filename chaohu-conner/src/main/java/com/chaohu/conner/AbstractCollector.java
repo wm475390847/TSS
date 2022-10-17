@@ -58,7 +58,7 @@ public abstract class AbstractCollector {
         String env = Property.getInstance().parse().getProperty("env");
         System.out.println();
         log.info("==> env: {}, caseName: {}, 是否为调试模式: {}", env, caseName, Context.debug.equals(Context.isOnDebug));
-        ProductConfig container = Context.getContainer(ProductConfig.class);
+        ProductConfig container = Context.getConfig(ProductConfig.class);
         return initInfo(method, env, container);
     }
 
@@ -89,7 +89,7 @@ public abstract class AbstractCollector {
      * @param info 消息内容
      */
     public void sendInform(Object info, Throwable throwable) {
-        DingDingConfig config = Context.getContainer(DingDingConfig.class);
+        DingDingConfig config = Context.getConfig(DingDingConfig.class);
         if (config == null) {
             return;
         }

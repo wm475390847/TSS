@@ -102,7 +102,8 @@ public abstract class AbstractConnector implements IConnector<Response> {
      */
     @Override
     public Api getApi() {
-        httpConfig = httpConfig == null ? Context.getHttpConfig() : httpConfig;
+        Optional.ofNullable(api).orElseThrow(() -> new HttpException("api为空，请使用IConnector.api()方法放入api"));
+        httpConfig = httpConfig == null ? Context.getConfig(HttpConfig.class) : httpConfig;
         api.setHttpConfig(httpConfig);
         return api;
     }
