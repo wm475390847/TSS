@@ -1,4 +1,4 @@
-package com.chaohu.table.sql;
+package com.chaohu.conner.sql;
 
 import lombok.Setter;
 import lombok.experimental.Accessors;

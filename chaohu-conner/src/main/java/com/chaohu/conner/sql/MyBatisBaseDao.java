@@ -1,4 +1,4 @@
-package com.chaohu.table.sql;
+package com.chaohu.conner.sql;
 
 import java.io.Serializable;
 

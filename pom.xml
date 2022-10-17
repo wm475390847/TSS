@@ -7,13 +7,13 @@
     <artifactId>chaohu-parent</artifactId>
     <name>chaohu</name>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
 
     <modules>
-        <module>all</module>
-        <module>conner</module>
-        <module>table</module>
-        <module>robot</module>
+        <module>chaohu-all</module>
+        <module>chaohu-table</module>
+        <module>chaohu-robot</module>
+        <module>chaohu-conner</module>
     </modules>
 
     <properties>
@@ -124,6 +124,7 @@
                     <target>${compile.version}</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -133,7 +134,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
