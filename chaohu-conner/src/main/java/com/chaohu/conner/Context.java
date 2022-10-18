@@ -63,6 +63,8 @@ public class Context {
     }
 
     /**
+     * 获取收集器
+     *
      * @param currentExecuteClass 正在执行的类{@link #currentExecuteClass}
      * @param <T>                 泛型的class
      * @return AbstractCollector
