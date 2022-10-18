@@ -63,7 +63,7 @@ public abstract class AbstractConnector implements IConnector<Response> {
         buildRequest(builder, api);
         Request request = builder.url(url).build();
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
-        if (api.isHttps() && api.getIgnoreSsl()) {
+        if (isHttps(url) && api.getIgnoreSsl()) {
             ignoreSsl(okHttpClientBuilder);
         }
         Proxy proxy = api.getProxy();
@@ -89,6 +89,7 @@ public abstract class AbstractConnector implements IConnector<Response> {
         Optional.of(response).filter(Response::isSuccessful).orElseThrow(() -> new HttpException(response.message()));
         ResponseLog<Response> log = new ResponseLog<>();
         Optional.ofNullable(api).orElseThrow(() -> new HttpException("api为空"));
+        System.err.println(api.getUrl());
         return log.setStartTime(response.sentRequestAtMillis())
                 .setEndTime(response.receivedResponseAtMillis())
                 .setResponse(response)
@@ -151,4 +152,8 @@ public abstract class AbstractConnector implements IConnector<Response> {
             return new X509Certificate[0];
         }
     };
+
+    private static boolean isHttps(String url) {
+        return url.contains("https://");
+    }
 }
