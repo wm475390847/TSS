@@ -63,15 +63,29 @@ public class Context {
     }
 
     /**
+     * @param currentExecuteClass 正在执行的类{@link #currentExecuteClass}
+     * @param <T>                 泛型的class
+     * @return AbstractCollector
+     */
+    public static <T> AbstractCollector getCollector(Class<T> currentExecuteClass) {
+        Harbor harbor = getHarbor(currentExecuteClass);
+        if (harbor == null) {
+            return null;
+        }
+        return harbor.getAbstractCollector();
+    }
+
+    /**
      * 获取harbor
      *
-     * @param executeClass 正在执行的类{@link #currentExecuteClass}
+     * @param currentExecuteClass 正在执行的类{@link #currentExecuteClass}
+     * @param <T>                 泛型的class
      * @return Harbor
      */
-    public static Harbor getHarbor(Class<?> executeClass) {
+    public static <T> Harbor getHarbor(Class<T> currentExecuteClass) {
         if (map.isEmpty()) {
             return null;
         }
-        return map.get(executeClass);
+        return map.get(currentExecuteClass);
     }
 }

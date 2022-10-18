@@ -29,15 +29,11 @@ public class ExecuteListener implements ITestListener, IClassListener {
     @Override
     public void onTestStart(ITestResult iTestResult) {
         Class<?> realClass = iTestResult.getTestClass().getRealClass();
-        Context.currentExecuteClass = realClass;
-        Harbor harbor = Context.getHarbor(realClass);
-        if (harbor == null) {
+        AbstractCollector collector = Context.getCollector(realClass);
+        if (collector == null) {
             return;
         }
-        AbstractCollector abstractCollector = harbor.getAbstractCollector();
-        if (abstractCollector != null) {
-            info = abstractCollector.initInfo(iTestResult);
-        }
+        info = collector.initInfo(iTestResult);
     }
 
     /**
@@ -47,18 +43,7 @@ public class ExecuteListener implements ITestListener, IClassListener {
      */
     @Override
     public void onTestSuccess(ITestResult iTestResult) {
-        Harbor harbor = Context.getHarbor(iTestResult.getTestClass().getRealClass());
-        if (harbor == null) {
-            return;
-        }
-        AbstractCollector abstractCollector = harbor.getAbstractCollector();
-        if (abstractCollector == null) {
-            return;
-        }
-        if (harbor.getSaveInfo()) {
-            abstractCollector.saveInfo(info, iTestResult);
-        }
-        cleanClass();
+        saveInfoAndSendInform(iTestResult, false);
     }
 
     /**
@@ -68,21 +53,7 @@ public class ExecuteListener implements ITestListener, IClassListener {
      */
     @Override
     public void onTestFailure(ITestResult iTestResult) {
-        Harbor harbor = Context.getHarbor(iTestResult.getTestClass().getRealClass());
-        if (harbor == null) {
-            return;
-        }
-        AbstractCollector abstractCollector = harbor.getAbstractCollector();
-        if (abstractCollector == null) {
-            return;
-        }
-        if (harbor.getSaveInfo()) {
-            abstractCollector.saveInfo(info, iTestResult);
-        }
-        if (harbor.getSendInfo()) {
-            abstractCollector.sendInform(info, iTestResult.getThrowable());
-        }
-        cleanClass();
+        saveInfoAndSendInform(iTestResult, true);
     }
 
     @Override
@@ -148,5 +119,24 @@ public class ExecuteListener implements ITestListener, IClassListener {
     @Override
     public void onAfterClass(ITestClass testClass) {
         Context.currentExecuteClass = null;
+    }
+
+    /**
+     * 保存数据&发送数据
+     *
+     * @param iTestResult 测试结果
+     * @param sendInfo    是否发送数据
+     */
+    private void saveInfoAndSendInform(ITestResult iTestResult, boolean sendInfo) {
+        Class<?> realClass = iTestResult.getTestClass().getRealClass();
+        Harbor harbor = Context.getHarbor(realClass);
+        AbstractCollector collector = Context.getCollector(realClass);
+        if (harbor != null && collector != null && harbor.getSaveInfo()) {
+            collector.saveInfo(info, iTestResult);
+        }
+        if (harbor != null && collector != null && harbor.getSendInfo() && sendInfo) {
+            collector.sendInform(info, iTestResult.getThrowable());
+        }
+        cleanClass();
     }
 }
