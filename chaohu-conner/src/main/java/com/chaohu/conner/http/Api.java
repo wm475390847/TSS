@@ -112,15 +112,6 @@ public class Api {
     }
 
     /**
-     * 判断请求utl是否为https的请求
-     *
-     * @return 是为true，不是为false
-     */
-    public boolean isHttps() {
-        return getUrl().contains("https://");
-    }
-
-    /**
      * 获取代理
      *
      * @return 代理类

@@ -6,7 +6,7 @@ package com.chaohu.conner;
  * @author wangmin
  * @date 2022/8/22 15:50
  */
-public abstract class AbstractMessageFormat {
+public abstract class AbstractMessage {
 
     /**
      * 获取格式信息

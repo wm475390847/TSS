@@ -1,6 +1,6 @@
 package com.chaohu.conner.base;
 
-import com.chaohu.conner.AbstractMessageFormat;
+import com.chaohu.conner.AbstractMessage;
 import com.chaohu.conner.util.TimeUtil;
 
 import java.util.Date;
@@ -11,7 +11,7 @@ import java.util.Date;
  * @author wangmin
  * @date 2022/5/31 10:19
  */
-public class CommonMessageFormat extends AbstractMessageFormat {
+public class CommonMessage extends AbstractMessage {
 
     @Override
     public String getFormat(Object info) {
