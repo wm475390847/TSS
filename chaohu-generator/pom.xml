@@ -9,7 +9,7 @@
     <parent>
         <artifactId>chaohu-parent</artifactId>
         <groupId>com.chaohu</groupId>
-        <version>1.2.4-SNAPSHOT</version>
+        <version>1.2.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>chaohu-generator</artifactId>

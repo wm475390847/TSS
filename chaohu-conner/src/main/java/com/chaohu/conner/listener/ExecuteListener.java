@@ -28,8 +28,8 @@ public class ExecuteListener implements ITestListener, IClassListener {
      */
     @Override
     public void onTestStart(ITestResult iTestResult) {
-        Class<?> realClass = iTestResult.getTestClass().getRealClass();
-        AbstractCollector collector = Context.getCollector(realClass);
+        Context.currentExecuteClass = iTestResult.getTestClass().getRealClass();
+        AbstractCollector collector = Context.getCollector(Context.currentExecuteClass);
         if (collector == null) {
             return;
         }
