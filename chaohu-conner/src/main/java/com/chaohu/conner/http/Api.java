@@ -39,7 +39,7 @@ public class Api {
     private final Boolean ignoreSsl;
     private final Object requestBody;
     private final String path;
-    private String url;
+    private final String url;
     private String innerHost;
     private String baseUrl;
     private Integer port;
@@ -92,14 +92,14 @@ public class Api {
      * @return 完整的url
      */
     public String getUrl() {
-        url = url == null ? createFullUrlByBaseUrl() : createFullUrlByUrl();
+        String fullUrl = url == null ? createFullUrlByBaseUrl() : createFullUrlByUrl();
         // 加签
         if (!sign.isEmpty()) {
             String signUrl = addSign(sign, urlParams);
-            url = url.contains("?") ? url.split("\\?")[0] : url;
-            return url + "?" + signUrl;
+            fullUrl = fullUrl.contains("?") ? fullUrl.split("\\?")[0] : url;
+            return fullUrl + "?" + signUrl;
         }
-        return url;
+        return fullUrl;
     }
 
     /**
@@ -117,7 +117,7 @@ public class Api {
      * @return 是为true，不是为false
      */
     public boolean isHttps() {
-        return url.contains("https://");
+        return getUrl().contains("https://");
     }
 
     /**
