@@ -89,7 +89,6 @@ public abstract class AbstractConnector implements IConnector<Response> {
         Optional.of(response).filter(Response::isSuccessful).orElseThrow(() -> new HttpException(response.message()));
         ResponseLog<Response> log = new ResponseLog<>();
         Optional.ofNullable(api).orElseThrow(() -> new HttpException("api为空"));
-        System.err.println(api.getUrl());
         return log.setStartTime(response.sentRequestAtMillis())
                 .setEndTime(response.receivedResponseAtMillis())
                 .setResponse(response)

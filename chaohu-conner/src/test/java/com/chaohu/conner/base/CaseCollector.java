@@ -1,7 +1,7 @@
 package com.chaohu.conner.base;
 
 import com.chaohu.conner.AbstractCollector;
-import com.chaohu.conner.AbstractMessageFormat;
+import com.chaohu.conner.AbstractMessage;
 import com.chaohu.conner.Context;
 import com.chaohu.conner.config.DingDingConfig;
 import com.chaohu.conner.config.ProductConfig;
@@ -82,7 +82,7 @@ public class CaseCollector extends AbstractCollector {
         }
         CaseInfo caseInfo = (CaseInfo) info;
         caseInfo.setCaseReason(throwable.getMessage());
-        AbstractMessageFormat messageFormat = config.getMessageFormat();
+        AbstractMessage messageFormat = config.getMessageFormat();
         String format = messageFormat.getFormat(info);
         System.err.println(format);
 //        new MarkdownRobot.Builder()

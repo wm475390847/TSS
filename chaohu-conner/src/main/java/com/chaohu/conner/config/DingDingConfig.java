@@ -1,6 +1,6 @@
 package com.chaohu.conner.config;
 
-import com.chaohu.conner.AbstractMessageFormat;
+import com.chaohu.conner.AbstractMessage;
 import lombok.Getter;
 
 /**
@@ -14,9 +14,9 @@ public class DingDingConfig extends AbstractConfig {
     private String keyword;
     private String[] phones;
     private boolean isAtAll;
-    private AbstractMessageFormat messageFormat;
+    private AbstractMessage messageFormat;
 
-    public DingDingConfig messageFormat(AbstractMessageFormat messageFormat) {
+    public DingDingConfig messageFormat(AbstractMessage messageFormat) {
         this.messageFormat = messageFormat;
         return this;
     }
