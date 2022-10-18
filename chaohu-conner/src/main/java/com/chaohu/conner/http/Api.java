@@ -92,11 +92,7 @@ public class Api {
      * @return 完整的url
      */
     public String getUrl() {
-        try {
-            url = url == null ? createFullUrlByBaseUrl() : createFullUrlByUrl();
-        } catch (Exception e) {
-            throw new HttpException(e.getMessage());
-        }
+        url = url == null ? createFullUrlByBaseUrl() : createFullUrlByUrl();
         // 加签
         if (!sign.isEmpty()) {
             String signUrl = addSign(sign, urlParams);

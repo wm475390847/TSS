@@ -28,8 +28,8 @@ public class ExecuteListener implements ITestListener, IClassListener {
      */
     @Override
     public void onTestStart(ITestResult iTestResult) {
-        Class<?> realClass = iTestResult.getTestClass().getRealClass();
-        AbstractCollector collector = Context.getCollector(realClass);
+        Context.currentExecuteClass = iTestResult.getTestClass().getRealClass();
+        AbstractCollector collector = Context.getCollector(Context.currentExecuteClass);
         if (collector == null) {
             return;
         }
@@ -131,10 +131,14 @@ public class ExecuteListener implements ITestListener, IClassListener {
         Class<?> realClass = iTestResult.getTestClass().getRealClass();
         Harbor harbor = Context.getHarbor(realClass);
         AbstractCollector collector = Context.getCollector(realClass);
-        if (harbor != null && collector != null && harbor.getSaveInfo()) {
+        if (harbor == null || collector == null) {
+            cleanClass();
+            return;
+        }
+        if (harbor.getSaveInfo()) {
             collector.saveInfo(info, iTestResult);
         }
-        if (harbor != null && collector != null && harbor.getSendInfo() && sendInfo) {
+        if (harbor.getSendInfo() && sendInfo) {
             collector.sendInform(info, iTestResult.getThrowable());
         }
         cleanClass();
