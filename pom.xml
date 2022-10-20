@@ -15,6 +15,7 @@
         <module>chaohu-robot</module>
         <module>chaohu-conner</module>
         <module>chaohu-generator</module>
+        <module>chaohu-media</module>
     </modules>
 
     <properties>
@@ -111,6 +112,20 @@
                 <artifactId>freemarker</artifactId>
                 <version>2.3.30</version>
             </dependency>
+
+            <!--opencv的java接口-->
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>javacv</artifactId>
+                <version>1.5.7</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.bytedeco</groupId>
+                <artifactId>javacv-platform</artifactId>
+                <version>1.5.7</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
