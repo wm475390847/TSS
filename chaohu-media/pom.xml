@@ -11,8 +11,10 @@
     </parent>
 
     <artifactId>chaohu-media</artifactId>
+    <name>${project.artifactId}</name>
 
     <properties>
+        <javacv.version>1.5.7</javacv.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
@@ -38,11 +40,13 @@
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>javacv</artifactId>
+            <version>${javacv.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>javacv-platform</artifactId>
+            <version>${javacv.version}</version>
         </dependency>
 
     </dependencies>
