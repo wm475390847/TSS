@@ -46,6 +46,11 @@
             <artifactId>chaohu-generator</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.chaohu</groupId>
+            <artifactId>chaohu-media</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
