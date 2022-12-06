@@ -19,10 +19,27 @@ public class ReExecuteListener implements IMethodInterceptor {
 
     private static Set<Pattern> patterns = new LinkedHashSet<>();
 
+    @Override
+    public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
+        String caseNames = System.getProperty("case_names");
+        if (caseNames == null || caseNames.trim().isEmpty()) {
+            log.info("caseName is null");
+            return methods;
+        } else {
+            log.info("execute caseName: {}", caseNames);
+            List<IMethodInstance> methodInstanceList = includeTest(caseNames, methods);
+            if (null != methodInstanceList && methodInstanceList.size() > 0) {
+                return methodInstanceList;
+            } else {
+                return new ArrayList<>();
+            }
+        }
+    }
+
     private List<IMethodInstance> includeTest(String testsToInclude, List<IMethodInstance> methods) {
         List<IMethodInstance> matchList = new LinkedList<>();
-        if (patterns == null) {
-            patterns = new HashSet<>();
+        if (patterns.isEmpty()) {
+            patterns = new LinkedHashSet<>();
             String[] testPatterns = testsToInclude.split(",");
             for (String testPattern : testPatterns) {
                 patterns.add(Pattern.compile(testPattern, Pattern.CASE_INSENSITIVE));
@@ -30,7 +47,6 @@ public class ReExecuteListener implements IMethodInterceptor {
         }
         try {
             for (IMethodInstance item : methods) {
-                log.info("methodName: {}", item.getMethod().getMethodName());
                 for (Pattern pattern : patterns) {
                     if (pattern.matcher(item.getMethod().getMethodName()).find()) {
                         matchList.add(item);
@@ -41,26 +57,10 @@ public class ReExecuteListener implements IMethodInterceptor {
         } catch (Exception e) {
             log.error(e.toString());
         }
-        log.info("matchList.size() == : {}", matchList.size());
+        log.info("executeCount: {}", matchList.size());
         if (matchList.size() == 0) {
             matchList = null;
         }
         return matchList;
-    }
-
-    @Override
-    public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
-        String caseNames = System.getProperty("case_names");
-        if (caseNames == null || caseNames.trim().isEmpty()) {
-            return methods;
-        } else {
-            log.info("execute caseName:{}", caseNames);
-            List<IMethodInstance> methodInstanceList = includeTest(caseNames, methods);
-            if (null != methodInstanceList && methodInstanceList.size() > 0) {
-                return methodInstanceList;
-            } else {
-                return new ArrayList<>();
-            }
-        }
     }
 }
