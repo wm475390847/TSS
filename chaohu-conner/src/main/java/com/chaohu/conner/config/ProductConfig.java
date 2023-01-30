@@ -12,6 +12,7 @@ public class ProductConfig extends AbstractConfig {
     private String caseOwner;
     private String productName;
     private Integer productId;
+    private Long ciJobId;
 
     public ProductConfig caseOwner(String caseOwner) {
         this.caseOwner = caseOwner;
@@ -25,6 +26,11 @@ public class ProductConfig extends AbstractConfig {
 
     public ProductConfig productId(Integer productId) {
         this.productId = productId;
+        return this;
+    }
+
+    public ProductConfig ciJobId(Long ciJobId) {
+        this.ciJobId = ciJobId;
         return this;
     }
 }

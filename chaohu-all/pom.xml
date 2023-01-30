@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.chaohu</groupId>
         <artifactId>chaohu-parent</artifactId>
-        <version>1.2.1-RELEASE</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>chaohu-all</artifactId>
@@ -49,6 +49,11 @@
         <dependency>
             <groupId>com.chaohu</groupId>
             <artifactId>chaohu-media</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.chaohu</groupId>
+            <artifactId>chaohu-hardware</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>

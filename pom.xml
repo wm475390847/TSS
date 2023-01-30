@@ -7,7 +7,7 @@
     <artifactId>chaohu-parent</artifactId>
     <name>chaohu</name>
     <packaging>pom</packaging>
-    <version>1.2.1-RELEASE</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <modules>
         <module>chaohu-all</module>
@@ -16,7 +16,7 @@
         <module>chaohu-conner</module>
         <module>chaohu-generator</module>
         <module>chaohu-media</module>
-        <!--        <module>chaohu-hardware</module>-->
+        <module>chaohu-hardware</module>
     </modules>
 
     <properties>
