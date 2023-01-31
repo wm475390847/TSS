@@ -82,6 +82,7 @@ public class ExecuteListener implements ITestListener, IClassListener {
     private void cleanClass() {
         Context.detailMessage = null;
         Context.failApi = null;
+        Context.requestId = null;
     }
 
     @Override

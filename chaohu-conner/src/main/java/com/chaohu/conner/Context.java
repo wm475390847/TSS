@@ -45,6 +45,11 @@ public class Context {
     public static String failApi;
 
     /**
+     * 请求id
+     */
+    public static String requestId;
+
+    /**
      * 获取配置
      *
      * @param configClass 需要获取的配置类型{@link DingDingConfig}、{@link HttpConfig}、{@link ProductConfig}
