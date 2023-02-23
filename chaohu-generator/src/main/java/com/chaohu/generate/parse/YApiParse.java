@@ -18,10 +18,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,16 +32,21 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
     private static final String SIGN = "/";
     private final Integer projectId;
     private final Integer[] catIds;
+    private final Integer[] ids;
 
     public YApiParse(Builder builder) {
         super(builder);
         this.catIds = builder.catIds;
         this.projectId = builder.projectId;
+        this.ids = builder.ids;
     }
 
     @Override
     public List<ApiInfo> getList() {
         String basePath = getBasePath() == null ? parseBasePath(projectId) == null ? "" : parseBasePath(projectId) : getBasePath();
+        if (ids.length != 0) {
+            return Arrays.stream(ids).map(e -> splitData(e, basePath)).collect(Collectors.toList());
+        }
         JSONArray apiInfo = projectId == null ? getApiInfoByCatId(catIds) : getApiInfoByProjectId(projectId);
         return apiInfo.stream().map(e -> (JSONObject) e).map(e -> splitData(e, basePath)).collect(Collectors.toList());
     }
@@ -93,18 +95,17 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
         return array;
     }
 
+
     /**
      * 分解数据
      *
-     * @param object   数据
+     * @param rowId    行id
      * @param basePath 基础路径
      * @return api信息
      */
-    private ApiInfo splitData(JSONObject object, String basePath) {
+    private ApiInfo splitData(Integer rowId, String basePath) {
         ApiInfo apiInfo = new ApiInfo();
         try {
-            Integer rowId = object.getInteger("_id");
-
             // 接口详情
             JSONObject data = InterfaceGetRequest
                     .builder()
@@ -171,6 +172,18 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
             log.error("处理数据错误: {}", e.getMessage());
         }
         return apiInfo;
+    }
+
+    /**
+     * 分解数据
+     *
+     * @param object   数据
+     * @param basePath 基础路径
+     * @return api信息
+     */
+    private ApiInfo splitData(JSONObject object, String basePath) {
+        Integer rowId = object.getInteger("_id");
+        return splitData(rowId, basePath);
     }
 
     /**
@@ -263,9 +276,15 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
     public static class Builder extends BaseBuilder<Builder, Object, ApiInfo> {
         private Integer projectId;
         private Integer[] catIds;
+        private Integer[] ids;
 
         public Builder catIds(Integer... catIds) {
             this.catIds = catIds.clone();
+            return this;
+        }
+
+        public Builder ids(Integer... ids) {
+            this.ids = ids.clone();
             return this;
         }
 
