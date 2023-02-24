@@ -74,15 +74,8 @@ public class ExecuteListener implements ITestListener, IClassListener {
 
     @Override
     public void onFinish(ITestContext iTestContext) {
-        cleanClass();
-        System.out.println();
         System.out.println("------------------------------------------执行结束------------------------------------------");
-    }
-
-    private void cleanClass() {
-        Context.detailMessage = null;
-        Context.failApi = null;
-        Context.requestId = null;
+        cleanClass();
     }
 
     @Override
@@ -144,4 +137,13 @@ public class ExecuteListener implements ITestListener, IClassListener {
         }
         cleanClass();
     }
+
+    /**
+     * 清理类
+     */
+    private void cleanClass() {
+        Context.detailMessage = null;
+        Context.responseLog = null;
+    }
+
 }

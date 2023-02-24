@@ -56,11 +56,17 @@ public abstract class AbstractConnector implements IConnector<Response> {
      */
     @Override
     public Response execute() {
+        // 获取api信息
         Api api = getApi();
+        // 获取接口
         String url = api.getUrl();
+        // 构建一个新的请求
         Request.Builder builder = new Request.Builder();
+        // 为请求天假请求头
         api.getHeaders().forEach(builder::header);
+        // 将一些参数放入请求中
         buildRequest(builder, api);
+        // 完成构建
         Request request = builder.url(url).build();
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         if (isHttps(url) && api.getIgnoreSsl()) {
@@ -77,8 +83,8 @@ public abstract class AbstractConnector implements IConnector<Response> {
         try {
             response = okHttpClientBuilder.build().newCall(request).execute();
         } catch (IOException | NullPointerException e) {
-            Context.failApi = url;
-            throw new HttpException(e.getMessage());
+            // 请求失败时抛出这个错误的url&错误类型
+            throw new HttpException(url, e.getMessage());
         }
         return response;
     }

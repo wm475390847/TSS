@@ -39,7 +39,7 @@ public class CaseCollector extends AbstractCollector {
         caseInfo = error == null ? caseInfo.setCaseResult(true).setCaseReason("PASS")
                 : caseInfo.setCaseResult(false).setCaseReason(error)
                 .setDetailMsg(Context.detailMessage)
-                .setFailApi(Context.failApi);
+                .setFailApi(Context.responseLog.getApi().getUrl());
         insertToCaseInfo(caseInfo);
     }
 

@@ -5,6 +5,8 @@ import com.chaohu.conner.config.HttpConfig;
 import com.chaohu.conner.config.IConfig;
 import com.chaohu.conner.config.ProductConfig;
 import com.chaohu.conner.container.IConfigContainer;
+import com.chaohu.conner.http.ResponseLog;
+import okhttp3.Response;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -40,14 +42,9 @@ public class Context {
     public static String detailMessage;
 
     /**
-     * 错误api
+     * 响应日志
      */
-    public static String failApi;
-
-    /**
-     * 请求id
-     */
-    public static String requestId;
+    public static ResponseLog<Response> responseLog;
 
     /**
      * 获取配置
