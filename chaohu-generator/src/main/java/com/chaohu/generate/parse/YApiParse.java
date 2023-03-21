@@ -44,7 +44,7 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
     @Override
     public List<ApiInfo> getList() {
         String basePath = getBasePath() == null ? parseBasePath(projectId) == null ? "" : parseBasePath(projectId) : getBasePath();
-        if (ids.length != 0) {
+        if (ids != null && ids.length != 0) {
             return Arrays.stream(ids).map(e -> splitData(e, basePath)).collect(Collectors.toList());
         }
         JSONArray apiInfo = projectId == null ? getApiInfoByCatId(catIds) : getApiInfoByProjectId(projectId);
