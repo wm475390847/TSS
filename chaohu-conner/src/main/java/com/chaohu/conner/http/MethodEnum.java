@@ -38,6 +38,11 @@ public enum MethodEnum {
     PUT("PUT", new PutConnector()),
 
     /**
+     * patch请求
+     */
+    PATCH("PATCH", new PatchConnector()),
+
+    /**
      * multipart请求
      */
     MULTIPART("MULTIPART", new MultipartConnector()),
