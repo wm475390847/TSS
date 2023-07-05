@@ -16,8 +16,8 @@ public class AContainer extends AbstractConfigContainer {
     public void init() {
         // http请求的配置
         ResponseLog<Response> responseLog = UicLoginApi.builder()
-                .account("zhanhaojian@xhzyqa")
-                .password("5a263a42712366cd00c54ae8c48909fe")
+                .account("")
+                .password("")
                 .build()
                 .execute();
         System.err.println(responseLog.toString());
@@ -26,7 +26,7 @@ public class AContainer extends AbstractConfigContainer {
         System.err.println(token);
         HttpConfig httpConfig = new HttpConfig()
                 .baseUrl("https://aiwriter.shuwen.com")
-                .ipaddress("116.62.90.214")
+                .ipaddress("")
                 .cookie(token);
         addConfig(httpConfig);
     }
