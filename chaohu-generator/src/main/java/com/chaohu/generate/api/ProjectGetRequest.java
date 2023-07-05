@@ -21,7 +21,7 @@ public class ProjectGetRequest extends AbstractHttpRequest {
     protected Api buildApi() {
         return new Api.Builder()
                 .baseUrl(Constant.BASE_URL)
-                .innerHost(Constant.HOST)
+                .hostname(Constant.HOST)
                 .header("Cookie", Constant.TOKEN)
                 .urlParamPart("id", projectId)
                 .path("api/project/get")

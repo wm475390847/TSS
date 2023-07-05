@@ -20,7 +20,8 @@ import java.util.Map;
 public class HttpConfig extends AbstractConfig {
 
     private String baseUrl;
-    private String host;
+    private String hostname;
+    private String ipaddress;
     private Integer port;
     private final Map<String, String> sign = new HashMap<>();
     private final Map<String, String> requestHeaders = new HashMap<>();
@@ -93,13 +94,24 @@ public class HttpConfig extends AbstractConfig {
     }
 
     /**
-     * 设置host
+     * 设置hostname
      *
-     * @param host host
+     * @param hostname hostname
      * @return HeadersConfig
      */
-    public HttpConfig host(String host) {
-        this.host = host;
+    public HttpConfig hostname(String hostname) {
+        this.hostname = hostname;
+        return this;
+    }
+
+    /**
+     * 设置ip
+     *
+     * @param ipaddress ip地址
+     * @return HeadersConfig
+     */
+    public HttpConfig ipaddress(String ipaddress) {
+        this.ipaddress = ipaddress;
         return this;
     }
 

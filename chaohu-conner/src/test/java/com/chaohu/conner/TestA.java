@@ -3,6 +3,7 @@
 //import com.chaohu.conner.annotation.Container;
 //import com.chaohu.conner.base.BaseCase;
 //import com.chaohu.conner.base.ConfigGetAppTopicsPostApi;
+//import com.chaohu.conner.base.Q3ReportKlinePostRequest;
 //import com.chaohu.conner.container.AContainer;
 //import com.chaohu.conner.http.ResponseLog;
 //import lombok.extern.slf4j.Slf4j;
@@ -29,5 +30,11 @@
 //        ResponseLog<Response> responseLog = ConfigGetAppTopicsPostApi.builder()
 //                .miceId("wl_a3b10bcfa7b34c9a89d5c1961a29e8f6").build().execute();
 //        System.err.println(responseLog.toString());
+//    }
+//
+//    @Test
+//    public void test_5() {
+//        ResponseLog<Response> responseLog = Q3ReportKlinePostRequest.builder().code("300371").publTime("2022-10-19 00:00:00").build().execute();
+//        log.info(responseLog.toString());
 //    }
 //}

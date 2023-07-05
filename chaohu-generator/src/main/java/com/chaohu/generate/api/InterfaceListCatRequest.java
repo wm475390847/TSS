@@ -25,7 +25,7 @@ public class InterfaceListCatRequest extends AbstractHttpRequest {
     protected Api buildApi() {
         return new Api.Builder()
                 .baseUrl(Constant.BASE_URL)
-                .innerHost(Constant.HOST)
+                .hostname(Constant.HOST)
                 .header("Cookie", Constant.TOKEN)
                 .path("/api/interface/list_cat")
                 .urlParamPart("page", page)
