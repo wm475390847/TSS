@@ -12,19 +12,20 @@ import okhttp3.Response;
 public interface IConnector<T> {
 
     /**
-     * 执行
-     *
-     * @return 请求响应
-     */
-    Response execute();
-
-    /**
      * 放入api对象
      *
      * @param api api对象
      * @return IConnector<T>
      */
     IConnector<T> api(Api api);
+
+    /**
+     * 放入http的配置
+     *
+     * @param httpConfig http配置
+     * @return IConnector<T>
+     */
+    IConnector<T> config(HttpConfig httpConfig);
 
     /**
      * 获取api
@@ -34,12 +35,11 @@ public interface IConnector<T> {
     Api getApi();
 
     /**
-     * 放入http的配置
+     * 执行
      *
-     * @param httpConfig http配置
-     * @return IConnector<T>
+     * @return 请求响应
      */
-    IConnector<T> config(HttpConfig httpConfig);
+    Response execute();
 
     /**
      * 获取日志

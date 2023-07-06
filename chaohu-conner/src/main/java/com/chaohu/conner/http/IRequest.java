@@ -19,13 +19,6 @@ public interface IRequest<T> {
     ResponseLog<T> execute();
 
     /**
-     * 获取接口对象
-     *
-     * @return api
-     */
-    Api getApi();
-
-    /**
      * 自定义请求体
      * <P>更新当前的请求体
      *

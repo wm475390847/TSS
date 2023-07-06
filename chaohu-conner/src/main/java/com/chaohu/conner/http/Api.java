@@ -2,10 +2,12 @@ package com.chaohu.conner.http;
 
 import com.chaohu.conner.config.HttpConfig;
 import com.chaohu.conner.exception.HttpException;
+import com.chaohu.conner.http.connector.IConnector;
 import com.shuwen.openapi.gateway.util.SignHelperV2;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Request;
+import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -57,14 +59,20 @@ public class Api {
         this.port = builder.port;
     }
 
+    public ResponseLog<Response> execute() {
+        IConnector<Response> connector = this.methodEnum.getConnector();
+        connector.api(this).execute();
+        return connector.getLog();
+    }
+
     /**
      * 将通http配置更新到api类中，如果没有就不进行更新
      *
      * @param config http配置类
      */
-    public void setHttpConfig(HttpConfig config) {
+    public Api setHttpConfig(HttpConfig config) {
         if (config == null) {
-            return;
+            return this;
         }
         hostname = config.getHostname() != null && StringUtils.isEmpty(hostname) ? config.getHostname() : hostname;
         // 如果config中host不为空并且api中host为空则使用config中的host，否则使用api中的host
@@ -81,6 +89,7 @@ public class Api {
         if (!config.getRequestHeaders().isEmpty()) {
             headers.putAll(config.getRequestHeaders());
         }
+        return this;
     }
 
     public String getHostname() {
