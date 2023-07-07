@@ -24,7 +24,7 @@ public @interface Collector {
      *
      * @return true or false
      */
-    boolean sendInform() default false;
+    boolean sendInform() default true;
 
     /**
      * 是否保存用例数据

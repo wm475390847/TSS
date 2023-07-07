@@ -1,12 +1,20 @@
 package com.chaohu.conner.base;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chaohu.conner.AbstractCollector;
 import com.chaohu.conner.AbstractMessage;
-import com.chaohu.conner.Context;
 import com.chaohu.conner.config.DingDingConfig;
 import com.chaohu.conner.config.ProductConfig;
+import com.chaohu.conner.http.Api;
+import com.chaohu.conner.http.MethodEnum;
+import com.chaohu.conner.http.connector.IConnector;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.Response;
+import org.apache.commons.lang3.StringUtils;
 import org.testng.ITestNGMethod;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * 用例收集器
@@ -32,15 +40,15 @@ public class CaseCollector extends AbstractCollector {
 
     @Override
     protected void saveInfo(Object info, String error) {
-        if (Context.debug.trim().equalsIgnoreCase(Context.isOnDebug)) {
-            return;
-        }
-        CaseInfo caseInfo = (CaseInfo) info;
-        caseInfo = error == null ? caseInfo.setCaseResult(true).setCaseReason("PASS")
-                : caseInfo.setCaseResult(false).setCaseReason(error)
-                .setDetailMsg(Context.detailMessage)
-                .setFailApi(Context.responseLog.getApi().getUrl());
-        insertToCaseInfo(caseInfo);
+//        if (Context.debug.trim().equalsIgnoreCase(Context.isOnDebug)) {
+//            return;
+//        }
+//        CaseInfo caseInfo = (CaseInfo) info;
+//        caseInfo = error == null ? caseInfo.setCaseResult(true).setCaseReason("PASS")
+//                : caseInfo.setCaseResult(false).setCaseReason(error)
+//                .setDetailMsg(Context.detailMessage)
+//                .setFailApi(Context.responseLog.getApi().getUrl());
+//        insertToCaseInfo(caseInfo);
     }
 
     /**
@@ -77,20 +85,51 @@ public class CaseCollector extends AbstractCollector {
 
     @Override
     protected void sendInform(Object info, DingDingConfig config, Throwable throwable) {
-        if (Context.debug.trim().equalsIgnoreCase(Context.isOnDebug)) {
-            return;
-        }
         CaseInfo caseInfo = (CaseInfo) info;
         caseInfo.setCaseReason(throwable.getMessage());
         AbstractMessage messageFormat = config.getMessageFormat();
         String format = messageFormat.getFormat(info);
-        System.err.println(format);
-//        new MarkdownRobot.Builder()
-//                .text(format)
-//                .mobiles(config.getPhones())
-//                .keyword(config.getKeyword())
-//                .webhook(config.getWebhook())
-//                .build()
-//                .send();
+        String webhook = config.getWebhook();
+        String keyword = config.getKeyword();
+        JSONObject message = message(keyword, format, config.getPhones());
+        try {
+            Api api = new Api.Builder()
+                    .contentType("application/json")
+                    .requestBody(message)
+                    .method(MethodEnum.POST)
+                    .url(webhook)
+                    .build();
+            if (StringUtils.isNotEmpty(webhook)) {
+                IConnector<Response> connector = api.getMethodEnum().getConnector();
+                Response response = connector.api(api).execute();
+                log.info("==> 发送钉钉通知");
+                if (response.body() != null) {
+                    log.info("==> response: {}", response.body().string());
+                    log.info("<== success");
+                } else {
+                    log.info("<== fail");
+                }
+            } else {
+                log.info("<== webhook为空");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private JSONObject message(String keyword, String text, String[] mobiles) {
+        StringBuilder atWho = new StringBuilder();
+        Arrays.stream(mobiles).forEach(e -> atWho.append("@").append(e));
+        JSONObject object = new JSONObject();
+        object.put("msgtype", "markdown");
+        JSONObject markdown = new JSONObject();
+        markdown.put("title", keyword);
+        markdown.put("text", text + atWho);
+        JSONObject at = new JSONObject();
+        at.put("atMobiles", mobiles);
+        at.put("isAtAll", false);
+        object.put("at", at);
+        object.put("markdown", markdown);
+        return object;
     }
 }

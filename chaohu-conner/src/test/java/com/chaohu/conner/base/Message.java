@@ -11,12 +11,11 @@ import java.util.Date;
  * @author wangmin
  * @date 2022/5/31 10:19
  */
-public class CommonMessage extends AbstractMessage {
+public class Message extends AbstractMessage {
 
     @Override
     public String getFormat(Object info) {
         CaseInfo caseInfo = (CaseInfo) info;
-
         String message = "- 时间：" + TimeUtil.dateToTimestamp(new Date(), TimeUtil.FORMAT_SECOND) + "\n\n"
 //                + "- 环境：" + ProductEnum.findEnum(caseInfo.getProductId()).getName() + "-" + caseInfo.getEnv() + " \n\n"
                 + "- 验证：" + caseInfo.getCaseDesc() + " \n\n"

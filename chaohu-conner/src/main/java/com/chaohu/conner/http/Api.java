@@ -2,10 +2,12 @@ package com.chaohu.conner.http;
 
 import com.chaohu.conner.config.HttpConfig;
 import com.chaohu.conner.exception.HttpException;
+import com.chaohu.conner.http.connector.IConnector;
 import com.shuwen.openapi.gateway.util.SignHelperV2;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Request;
+import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -57,29 +59,34 @@ public class Api {
         this.port = builder.port;
     }
 
+    public ResponseLog<Response> execute() {
+        IConnector<Response> connector = this.methodEnum.getConnector();
+        connector.api(this).execute();
+        return connector.getLog();
+    }
+
     /**
      * 将通http配置更新到api类中，如果没有就不进行更新
      *
      * @param config http配置类
      */
     public void setHttpConfig(HttpConfig config) {
-        if (config == null) {
-            return;
-        }
-        hostname = config.getHostname() != null && StringUtils.isEmpty(hostname) ? config.getHostname() : hostname;
-        // 如果config中host不为空并且api中host为空则使用config中的host，否则使用api中的host
-        ipaddress = config.getIpaddress() != null && StringUtils.isEmpty(ipaddress) ? config.getIpaddress() : ipaddress;
-        // 如果config中基础url不为空并且api中基础url为空则使用config中的基础url，否则使用api中的基础url
-        baseUrl = config.getBaseUrl() != null && StringUtils.isEmpty(baseUrl) ? config.getBaseUrl() : baseUrl;
-        // 如果config中port不为空并且api中port为空则使用config中的port，否则使用api中的port
-        port = config.getPort() != null && port == null ? config.getPort() : port;
-        // 如果config中的加签参数不为空并且api中允许加签则进行加签处理，否则不加签
-        if (!config.getSign().isEmpty()) {
-            sign.putAll(config.getSign());
-        }
-        // 如果http配置的头部配置类不为空就更新
-        if (!config.getRequestHeaders().isEmpty()) {
-            headers.putAll(config.getRequestHeaders());
+        if (config != null) {
+            hostname = config.getHostname() != null && StringUtils.isEmpty(hostname) ? config.getHostname() : hostname;
+            // 如果config中host不为空并且api中host为空则使用config中的host，否则使用api中的host
+            ipaddress = config.getIpaddress() != null && StringUtils.isEmpty(ipaddress) ? config.getIpaddress() : ipaddress;
+            // 如果config中基础url不为空并且api中基础url为空则使用config中的基础url，否则使用api中的基础url
+            baseUrl = config.getBaseUrl() != null && StringUtils.isEmpty(baseUrl) ? config.getBaseUrl() : baseUrl;
+            // 如果config中port不为空并且api中port为空则使用config中的port，否则使用api中的port
+            port = config.getPort() != null && port == null ? config.getPort() : port;
+            // 如果config中的加签参数不为空并且api中允许加签则进行加签处理，否则不加签
+            if (!config.getSign().isEmpty()) {
+                sign.putAll(config.getSign());
+            }
+            // 如果http配置的头部配置类不为空就更新
+            if (!config.getRequestHeaders().isEmpty()) {
+                headers.putAll(config.getRequestHeaders());
+            }
         }
     }
 

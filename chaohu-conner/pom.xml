@@ -49,7 +49,6 @@
             <groupId>com.shuwen.openapi</groupId>
             <artifactId>shuwen-openapi-gateway-sdk</artifactId>
         </dependency>
-
     </dependencies>
 
 </project>

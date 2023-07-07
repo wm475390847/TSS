@@ -9,7 +9,8 @@
     <test name="api-test">
         <classes>
             <class name="com.chaohu.conner.TestA"/>
-            <class name="com.chaohu.conner.TestO"/>
+            <class name="com.chaohu.conner.TestB"/>
+            <class name="com.chaohu.conner.TestC"/>
         </classes>
     </test>
 </suite>
