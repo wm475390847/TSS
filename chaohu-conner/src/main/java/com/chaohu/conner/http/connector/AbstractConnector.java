@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -76,7 +77,8 @@ public abstract class AbstractConnector implements IConnector<Response> {
         if (isHttps(url) && api.getIgnoreSsl()) {
             ignoreSsl(okHttpClientBuilder);
         }
-        if (api.getIpaddress() != null) {
+        
+        if (StringUtils.isNoneEmpty(api.getIpaddress())) {
             okHttpClientBuilder.dns(new CustomDns(api.getHostname(), api.getIpaddress()));
         }
 

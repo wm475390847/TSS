@@ -25,7 +25,6 @@ public class CustomDns implements Dns {
     }
 
     @Override
-
     public List<InetAddress> lookup(String hostname) throws UnknownHostException {
         if (hostname.equals(this.hostname)) {
             // 模拟将 "example.com" 解析为特定的 IP 地址
