@@ -19,6 +19,6 @@ public class PatchConnector extends AbstractConnector {
         Object bodyContent = api.getRequestBody();
         RequestBody requestBody = bodyContent == null ? RequestBody.create(mediaType, new byte[0])
                 : RequestBody.create(mediaType, bodyContent.toString());
-        builder.put(requestBody);
+        builder.patch(requestBody);
     }
 }
