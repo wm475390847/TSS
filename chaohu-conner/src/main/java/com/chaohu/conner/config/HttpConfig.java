@@ -137,4 +137,16 @@ public class HttpConfig extends AbstractConfig {
         sign.put(ak, sk);
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "HttpConfig{" +
+                "baseUrl='" + baseUrl + '\'' +
+                ", hostname='" + hostname + '\'' +
+                ", ipaddress='" + ipaddress + '\'' +
+                ", port=" + port +
+                ", sign=" + sign +
+                ", requestHeaders=" + requestHeaders +
+                '}';
+    }
 }
