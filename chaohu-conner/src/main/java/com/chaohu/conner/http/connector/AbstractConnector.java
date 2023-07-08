@@ -63,7 +63,10 @@ public abstract class AbstractConnector implements IConnector<Response> {
         // 构建一个新的请求
         Request.Builder builder = new Request.Builder();
         // 为请求天假请求头
-        api.getHeaders().forEach(builder::header);
+        api.getHeaders().entrySet()
+                .stream()
+                .filter(e -> e.getValue() != null && !e.getValue().isEmpty())
+                .forEach(e -> builder.header(e.getKey(), e.getValue()));
         // 将一些参数放入请求中
         buildRequest(builder, api);
         // 完成构建
