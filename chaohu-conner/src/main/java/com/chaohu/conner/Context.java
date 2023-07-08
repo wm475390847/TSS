@@ -92,7 +92,6 @@ public class Context {
     }
 
     public static void clearClass() {
-        map.remove(currentExecuteClass);
         currentExecuteClass = null;
     }
 
