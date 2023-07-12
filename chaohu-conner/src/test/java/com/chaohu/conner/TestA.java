@@ -21,7 +21,7 @@
 // * @date 2022/8/25 13:48
 // */
 //@Slf4j
-//@Collector(value = CaseCollector.class, sendInform = true)
+//@Collector(value = CaseCollector.class)
 //@Container(value = AContainer.class)
 //public class TestA extends BaseCase {
 //
@@ -34,17 +34,18 @@
 //    }
 //
 //    @Test(description = "test_2")
-//    @DingSend(send = true, phones = {"用例2"}, names = {"芽菜"})
+//    @DingSend(phones = {"用例2"}, names = {"芽菜"})
 //    public void test_2() {
 //        JSONObject object = new JSONObject();
 //        object.put("code", "300371");
 //        object.put("publTime", "2022-10-19 00:00:00");
-//        ResponseLog<Response> responseLog = new Api.Builder()
+//        Api api = new Api.Builder()
 //                .path("/api/dg/finance/visual/zhongzhengbao/q3report/kline")
 //                .method(MethodEnum.POST)
 //                .requestBody(object)
-//                .build()
-//                .execute();
-//        log.info(responseLog.toString());
+//                .pure(true)
+//                .build();
+//        Boolean pure = api.getPure();
+//        System.err.println(pure);
 //    }
 //}

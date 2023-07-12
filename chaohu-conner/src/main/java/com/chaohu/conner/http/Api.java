@@ -40,6 +40,7 @@ public class Api {
     private String baseUrl;
     private Integer port;
     private String path;
+    private final Boolean pure;
 
     public Api(Builder builder) {
         this.partParams.putAll(builder.formDataParts);
@@ -57,6 +58,7 @@ public class Api {
         this.ipaddress = builder.ipaddress;
         this.path = builder.path;
         this.port = builder.port;
+        this.pure = builder.pure;
     }
 
     public ResponseLog<Response> execute() {
@@ -71,6 +73,10 @@ public class Api {
      * @param config http配置类
      */
     public void setHttpConfig(HttpConfig config) {
+        // 如果是纯净模式，就不需要将http配置放进去
+        if (pure) {
+            return;
+        }
         if (config != null) {
             hostname = config.getHostname() != null && StringUtils.isEmpty(hostname) ? config.getHostname() : hostname;
             // 如果config中host不为空并且api中host为空则使用config中的host，否则使用api中的host
@@ -177,6 +183,7 @@ public class Api {
         private String hostname;
         private String ipaddress;
         private Integer port;
+        private Boolean pure = false;
 
         public Builder headers(Map<String, String> headers) {
             this.headers.putAll(headers);
@@ -273,6 +280,11 @@ public class Api {
 
         public Builder url(String url) {
             this.url = url;
+            return this;
+        }
+
+        public Builder pure(Boolean pure) {
+            this.pure = pure;
             return this;
         }
 

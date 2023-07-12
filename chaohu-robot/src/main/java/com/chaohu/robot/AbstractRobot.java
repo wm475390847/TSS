@@ -3,7 +3,7 @@ package com.chaohu.robot;
 import com.alibaba.fastjson.JSONObject;
 import com.chaohu.conner.http.Api;
 import com.chaohu.conner.http.MethodEnum;
-import com.chaohu.conner.http.connector.IConnector;
+import com.chaohu.conner.http.ResponseLog;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -38,10 +38,11 @@ public abstract class AbstractRobot implements IRobot {
                     .requestBody(message())
                     .method(MethodEnum.POST)
                     .url(webhook)
+                    .pure(true)
                     .build();
             if (StringUtils.isNotEmpty(webhook)) {
-                IConnector<Response> connector = api.getMethodEnum().getConnector();
-                Response response = connector.api(api).execute();
+                ResponseLog<Response> responseLog = api.execute();
+                Response response = responseLog.getResponse();
                 log.info("==> 发送钉钉通知");
                 if (response.body() != null) {
                     log.info("==> response: {}", response.body().string());
