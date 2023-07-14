@@ -40,7 +40,7 @@ public class Api {
     private String baseUrl;
     private Integer port;
     private String path;
-    private final Boolean pure;
+    private Boolean pure = false;
 
     public Api(Builder builder) {
         this.partParams.putAll(builder.formDataParts);
@@ -58,13 +58,28 @@ public class Api {
         this.ipaddress = builder.ipaddress;
         this.path = builder.path;
         this.port = builder.port;
-        this.pure = builder.pure;
     }
 
+    /**
+     * 执行
+     *
+     * @return 响应日志
+     */
     public ResponseLog<Response> execute() {
         IConnector<Response> connector = this.methodEnum.getConnector();
         connector.api(this).execute();
         return connector.getLog();
+    }
+
+    /**
+     * 纯净模式
+     * 使用纯净模式后接口调用不受全局配置影响
+     *
+     * @return this
+     */
+    public Api pure() {
+        this.pure = true;
+        return this;
     }
 
     /**
@@ -73,7 +88,7 @@ public class Api {
      * @param config http配置类
      */
     public void setHttpConfig(HttpConfig config) {
-        // 如果是纯净模式，就不需要将http配置放进去
+        // 如果是纯净模式，就不需要将全局配置放进去
         if (pure) {
             return;
         }
@@ -183,7 +198,6 @@ public class Api {
         private String hostname;
         private String ipaddress;
         private Integer port;
-        private Boolean pure = false;
 
         public Builder headers(Map<String, String> headers) {
             this.headers.putAll(headers);
@@ -280,11 +294,6 @@ public class Api {
 
         public Builder url(String url) {
             this.url = url;
-            return this;
-        }
-
-        public Builder pure(Boolean pure) {
-            this.pure = pure;
             return this;
         }
 

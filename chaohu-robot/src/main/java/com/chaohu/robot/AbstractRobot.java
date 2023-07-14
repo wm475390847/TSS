@@ -38,8 +38,8 @@ public abstract class AbstractRobot implements IRobot {
                     .requestBody(message())
                     .method(MethodEnum.POST)
                     .url(webhook)
-                    .pure(true)
-                    .build();
+                    .build()
+                    .pure();
             if (StringUtils.isNotEmpty(webhook)) {
                 ResponseLog<Response> responseLog = api.execute();
                 Response response = responseLog.getResponse();
