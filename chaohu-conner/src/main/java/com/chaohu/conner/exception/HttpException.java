@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 public class HttpException extends RuntimeException {
 
     public HttpException(String url, String message) {
-        super("接口: " + url + "\n\n 请求错误: [" + message + "]");
+        super("接口: " + url + "\n 请求错误: [" + message + "]");
     }
 
     public HttpException(String message) {
