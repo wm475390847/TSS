@@ -2,6 +2,7 @@ package com.chaohu.conner.http.connector;
 
 import com.chaohu.conner.Context;
 import com.chaohu.conner.config.HttpConfig;
+import com.chaohu.conner.exception.ConnerException;
 import com.chaohu.conner.exception.HttpException;
 import com.chaohu.conner.http.Api;
 import com.chaohu.conner.http.ResponseLog;
@@ -88,17 +89,17 @@ public abstract class AbstractConnector implements IConnector<Response> {
         try {
             response = okHttpClientBuilder.build().newCall(request).execute();
         } catch (IOException | NullPointerException e) {
-            throw new HttpException(e.getMessage());
+            throw new HttpException(url, e.getMessage());
         }
         return response;
     }
 
     @Override
     public ResponseLog<Response> getLog() {
-        Optional.ofNullable(response).orElseThrow(() -> new HttpException("请求响应为空"));
-        Optional.of(response).filter(Response::isSuccessful).orElseThrow(() -> new HttpException(response.message()));
+        Optional.ofNullable(response).orElseThrow(() -> new ConnerException("请求响应为空"));
+        Optional.of(response).filter(Response::isSuccessful).orElseThrow(() -> new ConnerException(response.message()));
         ResponseLog<Response> log = new ResponseLog<>();
-        Optional.ofNullable(api).orElseThrow(() -> new HttpException("api为空"));
+        Optional.ofNullable(api).orElseThrow(() -> new ConnerException("api为空"));
         return log.setStartTime(response.sentRequestAtMillis())
                 .setEndTime(response.receivedResponseAtMillis())
                 .setResponse(response)
@@ -112,7 +113,7 @@ public abstract class AbstractConnector implements IConnector<Response> {
      */
     @Override
     public Api getApi() {
-        Optional.ofNullable(api).orElseThrow(() -> new HttpException("api为空，请使用IConnector.api()方法放入api"));
+        Optional.ofNullable(api).orElseThrow(() -> new ConnerException("api为空，请使用IConnector.api()方法放入api"));
         httpConfig = httpConfig == null ? Context.getConfig(HttpConfig.class) : httpConfig;
         api.setHttpConfig(httpConfig);
         return api;

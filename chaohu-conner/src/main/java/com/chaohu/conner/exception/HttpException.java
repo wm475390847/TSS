@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class HttpException extends RuntimeException {
 
-    public HttpException(String message) {
-        super("请求异常: [" + message + "]");
+    public HttpException(String url, String message) {
+        super(url + " 请求异常: [" + message + "]");
     }
 }
