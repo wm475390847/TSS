@@ -88,7 +88,7 @@ public abstract class AbstractConnector implements IConnector<Response> {
         try {
             response = okHttpClientBuilder.build().newCall(request).execute();
         } catch (IOException | NullPointerException e) {
-            throw new HttpException(url, e.getMessage());
+            throw new HttpException(e.getMessage());
         }
         return response;
     }
