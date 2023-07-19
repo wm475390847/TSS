@@ -169,24 +169,16 @@
         </plugins>
     </build>
 
-    <!--将项目放到gitee代码仓库作为远程仓库-->
+    <!--将项目打包发送到私有仓库-->
     <distributionManagement>
         <repository>
-            <id>local-maven</id>
-            <url>file:${project.basedir}/release</url>
+            <id>private-releases</id>
+            <url>http://116.62.222.54/repository/maven-releases</url>
         </repository>
+        <snapshotRepository>
+            <id>private-snapshots</id>
+            <url>http://116.62.222.54/repository/maven-snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
-
-    <!--将项目打包发送到私有仓库-->
-    <!--    <distributionManagement>-->
-    <!--        <repository>-->
-    <!--            <id>private-releases</id>-->
-    <!--            <url>http://116.62.222.54/repository/maven-releases</url>-->
-    <!--        </repository>-->
-    <!--        <snapshotRepository>-->
-    <!--            <id>private-snapshots</id>-->
-    <!--            <url>http://116.62.222.54/repository/maven-snapshots</url>-->
-    <!--        </snapshotRepository>-->
-    <!--    </distributionManagement>-->
 
 </project>

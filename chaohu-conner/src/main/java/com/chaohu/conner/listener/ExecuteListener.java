@@ -82,6 +82,7 @@ public class ExecuteListener implements ITestListener, IClassListener {
 
     @Override
     public void onStart(ITestContext iTestContext) {
+        System.out.println();
         System.out.println("------------------------------------------开始执行------------------------------------------");
         Context.clearMethod();
         Context.clearClass();
@@ -89,6 +90,7 @@ public class ExecuteListener implements ITestListener, IClassListener {
 
     @Override
     public void onFinish(ITestContext iTestContext) {
+        System.out.println();
         System.out.println("------------------------------------------执行结束------------------------------------------");
         Context.clearMethod();
         Context.clearClass();
