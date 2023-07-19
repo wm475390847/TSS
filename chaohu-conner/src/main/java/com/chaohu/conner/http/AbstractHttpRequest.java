@@ -28,15 +28,9 @@ public abstract class AbstractHttpRequest implements IRequest<Response> {
     @Override
     public ResponseLog<Response> execute() {
         Api api = buildApi();
-        IConnector<Response> connector = getConnector(api);
+        IConnector<Response> connector = api.getMethodEnum().getConnector();
         connector.api(api).config(httpConfig).execute();
         return connector.getLog();
-    }
-
-    @Override
-    public Api getApi() {
-        Api api = buildApi();
-        return getConnector(api).getApi();
     }
 
     @Override
@@ -89,7 +83,6 @@ public abstract class AbstractHttpRequest implements IRequest<Response> {
      * @param page 页码
      */
     protected void setPage(Integer page) {
-
     }
 
     /**
@@ -126,9 +119,5 @@ public abstract class AbstractHttpRequest implements IRequest<Response> {
      */
     protected Object getCurrentBody() {
         return currentBody == null ? buildBody() : currentBody;
-    }
-
-    private IConnector<Response> getConnector(Api api) {
-        return api.getMethodEnum().getConnector();
     }
 }

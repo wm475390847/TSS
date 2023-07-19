@@ -3,6 +3,8 @@ package com.chaohu.conner.config;
 import com.chaohu.conner.AbstractMessage;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 /**
  * @author wangmin
  * @date 2022/5/18 11:27
@@ -39,5 +41,16 @@ public class DingDingConfig extends AbstractConfig {
     public DingDingConfig phones(String... phones) {
         this.phones = phones.clone();
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "DingDingConfig{" +
+                "webhook='" + webhook + '\'' +
+                ", keyword='" + keyword + '\'' +
+                ", phones=" + Arrays.toString(phones) +
+                ", isAtAll=" + isAtAll +
+                ", messageFormat=" + messageFormat +
+                '}';
     }
 }

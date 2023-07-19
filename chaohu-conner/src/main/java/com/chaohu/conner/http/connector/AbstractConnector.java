@@ -1,21 +1,21 @@
 package com.chaohu.conner.http.connector;
 
-import com.chaohu.conner.exception.HttpException;
-import com.chaohu.conner.config.HttpConfig;
 import com.chaohu.conner.Context;
+import com.chaohu.conner.config.HttpConfig;
+import com.chaohu.conner.exception.HttpException;
 import com.chaohu.conner.http.Api;
 import com.chaohu.conner.http.ResponseLog;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
-import java.net.Proxy;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -63,27 +63,31 @@ public abstract class AbstractConnector implements IConnector<Response> {
         // 构建一个新的请求
         Request.Builder builder = new Request.Builder();
         // 为请求天假请求头
-        api.getHeaders().forEach(builder::header);
+        api.getHeaders().entrySet()
+                .stream()
+                .filter(e -> e.getValue() != null && !e.getValue().isEmpty())
+                .forEach(e -> builder.header(e.getKey(), e.getValue()));
         // 将一些参数放入请求中
         buildRequest(builder, api);
         // 完成构建
         Request request = builder.url(url).build();
-        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
-        if (isHttps(url) && api.getIgnoreSsl()) {
-            ignoreSsl(okHttpClientBuilder);
-        }
-        Proxy proxy = api.getProxy();
-        if (proxy != null) {
-            okHttpClientBuilder.proxy(proxy);
-        }
-        okHttpClientBuilder.retryOnConnectionFailure(true)
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS);
+
+        if (isHttps(url) && api.getIgnoreSsl()) {
+            ignoreSsl(okHttpClientBuilder);
+        }
+        
+        if (StringUtils.isNoneEmpty(api.getIpaddress())) {
+            okHttpClientBuilder.dns(new CustomDns(api.getHostname(), api.getIpaddress()));
+        }
+
         try {
             response = okHttpClientBuilder.build().newCall(request).execute();
         } catch (IOException | NullPointerException e) {
-            // 请求失败时抛出这个错误的url&错误类型
             throw new HttpException(url, e.getMessage());
         }
         return response;

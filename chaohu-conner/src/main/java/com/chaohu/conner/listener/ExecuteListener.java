@@ -1,15 +1,19 @@
 package com.chaohu.conner.listener;
 
-import com.chaohu.conner.annotation.Collector;
-import com.chaohu.conner.annotation.Container;
-import com.chaohu.conner.container.IConfigContainer;
+import com.chaohu.conner.AbstractCollector;
 import com.chaohu.conner.Context;
 import com.chaohu.conner.Harbor;
-import com.chaohu.conner.AbstractCollector;
+import com.chaohu.conner.annotation.Collector;
+import com.chaohu.conner.annotation.Container;
+import com.chaohu.conner.annotation.DingSend;
+import com.chaohu.conner.config.DingDingConfig;
+import com.chaohu.conner.container.IConfigContainer;
 import com.chaohu.conner.exception.ListenerException;
 import com.chaohu.conner.util.Property;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.*;
+
+import java.lang.reflect.Method;
 
 /**
  * 执行监听器
@@ -28,12 +32,10 @@ public class ExecuteListener implements ITestListener, IClassListener {
      */
     @Override
     public void onTestStart(ITestResult iTestResult) {
-        Context.currentExecuteClass = iTestResult.getTestClass().getRealClass();
-        AbstractCollector collector = Context.getCollector(Context.currentExecuteClass);
-        if (collector == null) {
-            return;
+        AbstractCollector collector = Context.getCollector();
+        if (collector != null) {
+            info = collector.initInfo(iTestResult);
         }
-        info = collector.initInfo(iTestResult);
     }
 
     /**
@@ -43,7 +45,7 @@ public class ExecuteListener implements ITestListener, IClassListener {
      */
     @Override
     public void onTestSuccess(ITestResult iTestResult) {
-        saveInfoAndSendInform(iTestResult, false);
+        saveInfoAndSendInform(iTestResult, false, null);
     }
 
     /**
@@ -53,31 +55,52 @@ public class ExecuteListener implements ITestListener, IClassListener {
      */
     @Override
     public void onTestFailure(ITestResult iTestResult) {
-        saveInfoAndSendInform(iTestResult, true);
-    }
-
-    @Override
-    public void onTestSkipped(ITestResult iTestResult) {
-
-    }
-
-    @Override
-    public void onTestFailedButWithinSuccessPercentage(ITestResult iTestResult) {
-
+        Harbor harbor = Context.getHarbor();
+        if (harbor == null) {
+            return;
+        }
+        Method method = iTestResult.getMethod().getConstructorOrMethod().getMethod();
+        DingDingConfig config = Context.getConfig(DingDingConfig.class);
+        DingDingConfig newConfig = new DingDingConfig();
+        if (config != null) {
+            newConfig = (DingDingConfig) config.clone();
+        }
+        if (method.isAnnotationPresent(DingSend.class)) {
+            // 如果存在方法注解则获取注解信息进行通知
+            DingSend annotation = method.getAnnotation(DingSend.class);
+            String[] phones = annotation.phones();
+            newConfig.phones(phones);
+            // 方法注解允许则发送通知，不允许则不发送通知
+            if (annotation.send()) {
+                saveInfoAndSendInform(iTestResult, true, newConfig);
+            }
+        } else {
+            // 如果不存在方法注解，则按照类注解允许发送进行通知
+            saveInfoAndSendInform(iTestResult, true, newConfig);
+        }
     }
 
     @Override
     public void onStart(ITestContext iTestContext) {
+        System.out.println();
         System.out.println("------------------------------------------开始执行------------------------------------------");
-        cleanClass();
+        Context.clearMethod();
+        Context.clearClass();
     }
 
     @Override
     public void onFinish(ITestContext iTestContext) {
+        System.out.println();
         System.out.println("------------------------------------------执行结束------------------------------------------");
-        cleanClass();
+        Context.clearMethod();
+        Context.clearClass();
     }
 
+    /**
+     * 测试类执行之前获取注解信息存入缓存
+     *
+     * @param testClass 测试类
+     */
     @Override
     public void onBeforeClass(ITestClass testClass) {
         Class<?> realClass = testClass.getRealClass();
@@ -89,8 +112,8 @@ public class ExecuteListener implements ITestListener, IClassListener {
             try {
                 AbstractCollector abstractCollector = value.newInstance();
                 harbor.setAbstractCollector(abstractCollector)
-                        .setSendInfo(annotation.sendInform())
-                        .setSaveInfo(annotation.saveInfo());
+                        .setSend(annotation.sendInform())
+                        .setSave(annotation.saveInfo());
             } catch (InstantiationException | IllegalAccessException e) {
                 throw new ListenerException(e.getMessage());
             }
@@ -107,43 +130,40 @@ public class ExecuteListener implements ITestListener, IClassListener {
                 throw new ListenerException(e.getMessage());
             }
         }
+        // 将当前执行类与初始化数据放入内存
+        Context.currentExecuteClass = realClass;
         Context.map.put(realClass, harbor);
     }
 
+    /**
+     * 测试类执行之后清理缓存
+     *
+     * @param testClass 测试类
+     */
     @Override
     public void onAfterClass(ITestClass testClass) {
-        Context.currentExecuteClass = null;
+        Context.clearClass();
     }
 
     /**
      * 保存数据&发送数据
      *
      * @param iTestResult 测试结果
-     * @param sendInfo    是否发送数据
+     * @param sendInform  是否发送数据
      */
-    private void saveInfoAndSendInform(ITestResult iTestResult, boolean sendInfo) {
-        Class<?> realClass = iTestResult.getTestClass().getRealClass();
-        Harbor harbor = Context.getHarbor(realClass);
-        AbstractCollector collector = Context.getCollector(realClass);
-        if (harbor == null || collector == null) {
-            cleanClass();
-            return;
+    private void saveInfoAndSendInform(ITestResult iTestResult, boolean sendInform, DingDingConfig config) {
+        Harbor harbor = Context.getHarbor();
+        if (harbor != null) {
+            AbstractCollector collector = Context.getCollector();
+            if (collector != null) {
+                if (harbor.getSave()) {
+                    collector.saveInfo(info, iTestResult);
+                }
+                if (harbor.getSend() && sendInform) {
+                    collector.sendInform(info, iTestResult, config);
+                }
+            }
         }
-        if (harbor.getSaveInfo()) {
-            collector.saveInfo(info, iTestResult);
-        }
-        if (harbor.getSendInfo() && sendInfo) {
-            collector.sendInform(info, iTestResult.getThrowable());
-        }
-        cleanClass();
+        Context.clearMethod();
     }
-
-    /**
-     * 清理类
-     */
-    private void cleanClass() {
-        Context.detailMessage = null;
-        Context.responseLog = null;
-    }
-
 }

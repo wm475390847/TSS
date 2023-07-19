@@ -7,6 +7,14 @@ package com.chaohu.conner.config;
  * @author wangmin
  * @date 2022/5/17 13:05
  */
-public abstract class AbstractConfig implements IConfig {
+public abstract class AbstractConfig implements IConfig, Cloneable {
 
+    @Override
+    public AbstractConfig clone() {
+        try {
+            return (AbstractConfig) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

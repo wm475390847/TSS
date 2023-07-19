@@ -53,7 +53,7 @@ public class Context {
      * @return 配置容器
      */
     public static <C extends IConfig> C getConfig(Class<C> configClass) {
-        Harbor harbor = getHarbor(currentExecuteClass);
+        Harbor harbor = getHarbor();
         if (harbor == null) {
             return null;
         }
@@ -67,12 +67,11 @@ public class Context {
     /**
      * 获取收集器
      *
-     * @param currentExecuteClass 正在执行的类{@link #currentExecuteClass}
-     * @param <T>                 泛型的class
+     * @param <T> 泛型的class
      * @return AbstractCollector
      */
-    public static <T> AbstractCollector getCollector(Class<T> currentExecuteClass) {
-        Harbor harbor = getHarbor(currentExecuteClass);
+    public static <T> AbstractCollector getCollector() {
+        Harbor harbor = getHarbor();
         if (harbor == null) {
             return null;
         }
@@ -82,14 +81,22 @@ public class Context {
     /**
      * 获取harbor
      *
-     * @param currentExecuteClass 正在执行的类{@link #currentExecuteClass}
-     * @param <T>                 泛型的class
+     * @param <T> 泛型的class
      * @return Harbor
      */
-    public static <T> Harbor getHarbor(Class<T> currentExecuteClass) {
+    public static <T> Harbor getHarbor() {
         if (map.isEmpty()) {
             return null;
         }
         return map.get(currentExecuteClass);
+    }
+
+    public static void clearClass() {
+        currentExecuteClass = null;
+    }
+
+    public static void clearMethod() {
+        detailMessage = null;
+        responseLog = null;
     }
 }

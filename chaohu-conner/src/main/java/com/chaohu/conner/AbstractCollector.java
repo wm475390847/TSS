@@ -88,11 +88,9 @@ public abstract class AbstractCollector {
      *
      * @param info 消息内容
      */
-    public void sendInform(Object info, Throwable throwable) {
-        DingDingConfig config = Context.getConfig(DingDingConfig.class);
-        if (config == null) {
-            return;
+    public void sendInform(Object info, ITestResult iTestResult, DingDingConfig config) {
+        if (config != null) {
+            sendInform(info, config, iTestResult.getThrowable());
         }
-        sendInform(info, config, throwable);
     }
 }

@@ -25,10 +25,20 @@ public class Harbor {
     /**
      * 是否发送通知
      */
-    Boolean sendInfo;
+    Boolean send;
 
     /**
      * 是否保存用例数据
      */
-    Boolean saveInfo;
+    Boolean save;
+
+    @Override
+    public String toString() {
+        return "Harbor{" +
+                "configContainer=" + configContainer +
+                ", abstractCollector=" + abstractCollector +
+                ", send=" + send +
+                ", save=" + save +
+                '}';
+    }
 }

@@ -1,21 +1,17 @@
 package com.chaohu.conner.http;
 
-import com.chaohu.conner.exception.HttpException;
 import com.chaohu.conner.config.HttpConfig;
+import com.chaohu.conner.exception.HttpException;
+import com.chaohu.conner.http.connector.IConnector;
 import com.shuwen.openapi.gateway.util.SignHelperV2;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.HttpUrl;
 import okhttp3.Request;
+import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Api属性类
@@ -38,11 +34,13 @@ public class Api {
     private final MethodEnum methodEnum;
     private final Boolean ignoreSsl;
     private final Object requestBody;
-    private final String path;
     private final String url;
-    private String innerHost;
+    private String hostname;
+    private String ipaddress;
     private String baseUrl;
     private Integer port;
+    private String path;
+    private Boolean pure = false;
 
     public Api(Builder builder) {
         this.partParams.putAll(builder.formDataParts);
@@ -56,9 +54,32 @@ public class Api {
         this.ignoreSsl = builder.ignoreSsl;
         this.baseUrl = builder.baseUrl;
         this.url = builder.url;
-        this.innerHost = builder.innerHost;
+        this.hostname = builder.hostname;
+        this.ipaddress = builder.ipaddress;
         this.path = builder.path;
         this.port = builder.port;
+    }
+
+    /**
+     * 执行
+     *
+     * @return 响应日志
+     */
+    public ResponseLog<Response> execute() {
+        IConnector<Response> connector = this.methodEnum.getConnector();
+        connector.api(this).execute();
+        return connector.getLog();
+    }
+
+    /**
+     * 纯净模式
+     * 使用纯净模式后接口调用不受全局配置影响
+     *
+     * @return this
+     */
+    public Api pure() {
+        this.pure = true;
+        return this;
     }
 
     /**
@@ -67,23 +88,31 @@ public class Api {
      * @param config http配置类
      */
     public void setHttpConfig(HttpConfig config) {
-        if (config == null) {
+        // 如果是纯净模式，就不需要将全局配置放进去
+        if (pure) {
             return;
         }
-        // 如果config中host不为空并且api中host为空则使用config中的host，否则使用api中的host
-        innerHost = config.getHost() != null && StringUtils.isEmpty(innerHost) ? config.getHost() : innerHost;
-        // 如果config中基础url不为空并且api中基础url为空则使用config中的基础url，否则使用api中的基础url
-        baseUrl = config.getBaseUrl() != null && StringUtils.isEmpty(baseUrl) ? config.getBaseUrl() : baseUrl;
-        // 如果config中port不为空并且api中port为空则使用config中的port，否则使用api中的port
-        port = config.getPort() != null && port == null ? config.getPort() : port;
-        // 如果config中的加签参数不为空并且api中允许加签则进行加签处理，否则不加签
-        if (!config.getSign().isEmpty()) {
-            sign.putAll(config.getSign());
+        if (config != null) {
+            hostname = config.getHostname() != null && StringUtils.isEmpty(hostname) ? config.getHostname() : hostname;
+            // 如果config中host不为空并且api中host为空则使用config中的host，否则使用api中的host
+            ipaddress = config.getIpaddress() != null && StringUtils.isEmpty(ipaddress) ? config.getIpaddress() : ipaddress;
+            // 如果config中基础url不为空并且api中基础url为空则使用config中的基础url，否则使用api中的基础url
+            baseUrl = config.getBaseUrl() != null && StringUtils.isEmpty(baseUrl) ? config.getBaseUrl() : baseUrl;
+            // 如果config中port不为空并且api中port为空则使用config中的port，否则使用api中的port
+            port = config.getPort() != null && port == null ? config.getPort() : port;
+            // 如果config中的加签参数不为空并且api中允许加签则进行加签处理，否则不加签
+            if (!config.getSign().isEmpty()) {
+                sign.putAll(config.getSign());
+            }
+            // 如果http配置的头部配置类不为空就更新
+            if (!config.getRequestHeaders().isEmpty()) {
+                headers.putAll(config.getRequestHeaders());
+            }
         }
-        // 如果http配置的头部配置类不为空就更新
-        if (!config.getRequestHeaders().isEmpty()) {
-            headers.putAll(config.getRequestHeaders());
-        }
+    }
+
+    public String getHostname() {
+        return new Request.Builder().url(getUrl()).build().url().host();
     }
 
     /**
@@ -92,7 +121,7 @@ public class Api {
      * @return 完整的url
      */
     public String getUrl() {
-        String fullUrl = url == null ? createFullUrlByBaseUrl() : createFullUrlByUrl();
+        String fullUrl = createFullUrl();
         // 加签
         if (!sign.isEmpty()) {
             String signUrl = addSign(sign, urlParams);
@@ -103,100 +132,35 @@ public class Api {
     }
 
     /**
-     * 转换为okhttp3.{@link Request}对象
-     *
-     * @return Request
-     */
-    public Request toRequest() {
-        return new Request.Builder().url(url).build();
-    }
-
-    /**
-     * 获取代理
-     *
-     * @return 代理类
-     */
-    public Proxy getProxy() {
-        if (innerHost == null) {
-            return null;
-        }
-        // 得到协议、host、端口
-        HttpUrl httpUrl = toRequest().url();
-        String scheme = httpUrl.scheme();
-        String hostName = httpUrl.host();
-        port = port == null ? scheme.contains("http") ? 80 : 443 : port;
-        // 绑定url
-        InetAddress byAddress = null;
-        try {
-            byAddress = InetAddress.getByAddress(hostName, ipParse(innerHost));
-        } catch (UnknownHostException e) {
-            log.error("host绑定错误: {}", e.getMessage());
-        }
-        InetSocketAddress inetSocketAddress = new InetSocketAddress(byAddress, port);
-        return new Proxy(Proxy.Type.HTTP, inetSocketAddress);
-    }
-
-    /**
-     * ip解析
-     *
-     * @param host host 127.0.0.1
-     * @return byte[]
-     */
-    private byte[] ipParse(String host) {
-        String[] ipStr = host.split("\\.");
-        byte[] ipBuf = new byte[4];
-        for (int i = 0; i < ipBuf.length; i++) {
-            ipBuf[i] = (byte) (Integer.parseInt(ipStr[i]) & 0xff);
-        }
-        return ipBuf;
-    }
-
-    /**
-     * 创建完整的url<br>如果url是完整的则需要http://${host}/${path}+?+${param}
-     *
-     * @return 完整的url
-     */
-    private String createFullUrlByUrl() {
-        Optional.ofNullable(url).orElseThrow(() -> new HttpException("url为空"));
-        StringBuilder sb = new StringBuilder(url);
-        return createFullUrl(sb);
-    }
-
-    /**
      * 创建完整的url<br>如果只有baseUrl则需要http://${host}+/处理+${path}+?+${param}</P>
      *
      * @return 完整的url
      */
-    private String createFullUrlByBaseUrl() {
-        Optional.ofNullable(baseUrl).orElseThrow(() -> new HttpException("baseUrl为空"));
-        StringBuilder sb = new StringBuilder(baseUrl);
-        String newPath = path;
-        if (newPath != null) {
+    private String createFullUrl() {
+        String str = null;
+        if (url != null) {
+            str = url;
+        } else if (baseUrl != null && path != null) {
+            StringBuilder sb = new StringBuilder(baseUrl);
             if (!baseUrl.endsWith(SOLIDUS)) {
                 sb.append(SOLIDUS);
             }
-            newPath = newPath.startsWith(SOLIDUS) ? newPath.replaceFirst(SOLIDUS, "") : newPath;
-            sb.append(newPath);
+            path = path.startsWith(SOLIDUS) ? path.replaceFirst(SOLIDUS, "") : path;
+            sb.append(path);
+            str = sb.toString();
+        } else {
+            throw new HttpException("URL为空");
         }
-        return createFullUrl(sb);
-    }
 
-    /**
-     * 创建完整的url<br>如果是get请求组合成：http://xxx.xxx.xx/xxx/xxx?xxx=11&sss=111
-     *
-     * @param sb url的StringBuilder
-     * @return 带有参数的完整url
-     */
-    private String createFullUrl(StringBuilder sb) {
         if (urlParams.isEmpty()) {
-            return sb.toString();
+            return str;
         } else {
             StringBuilder pathSb = new StringBuilder();
             urlParams.forEach((key, value) -> pathSb.append(key).append("=").append(value).append("&"));
             if (pathSb.toString().endsWith("&")) {
                 pathSb.replace(pathSb.length() - 1, pathSb.length(), "");
             }
-            return sb + "?" + pathSb;
+            return str + "?" + pathSb;
         }
     }
 
@@ -231,7 +195,8 @@ public class Api {
         private String path;
         private String url;
         private String baseUrl;
-        private String innerHost;
+        private String hostname;
+        private String ipaddress;
         private Integer port;
 
         public Builder headers(Map<String, String> headers) {
@@ -307,8 +272,13 @@ public class Api {
             return this;
         }
 
-        public Builder innerHost(String innerHost) {
-            this.innerHost = innerHost;
+        public Builder hostname(String hostname) {
+            this.hostname = hostname;
+            return this;
+        }
+
+        public Builder ipaddress(String ipaddress) {
+            this.ipaddress = ipaddress;
             return this;
         }
 

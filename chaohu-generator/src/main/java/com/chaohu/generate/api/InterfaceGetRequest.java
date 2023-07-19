@@ -21,7 +21,7 @@ public class InterfaceGetRequest extends AbstractHttpRequest {
     protected Api buildApi() {
         return new Api.Builder()
                 .baseUrl(Constant.BASE_URL)
-                .innerHost(Constant.HOST)
+                .hostname(Constant.HOST)
                 .header("Cookie", Constant.TOKEN)
                 .urlParamPart("id", id)
                 .path("api/interface/get")

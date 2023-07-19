@@ -7,31 +7,33 @@ import com.chaohu.conner.http.MethodEnum;
 import lombok.Builder;
 
 /**
- * uic平台登陆
+ * 7、发送消息 董文强
  *
  * @author wangmin
- * @date 2021/9/28 2:36 下午
+ * @date Thu May 11 16:07:21 CST 2023
  */
 @Builder
-public class UicLoginApi extends AbstractHttpRequest {
-    private final String account;
-    private final String password;
+public class Q3ReportKlinePostRequest extends AbstractHttpRequest {
+
+    private final String code;
+
+    private final String publTime;
 
     @Override
     protected Api buildApi() {
         return new Api.Builder()
-                .baseUrl("https://account.shuwen.com")
-                .path("/api/uic/login/pw")
-                .requestBody(getCurrentBody())
+                .path("/api/dg/finance/visual/zhongzhengbao/q3report/kline")
                 .method(MethodEnum.POST)
+                .contentType("application/json")
+                .requestBody(getCurrentBody())
                 .build();
     }
 
     @Override
     protected Object buildBody() {
         JSONObject object = new JSONObject();
-        object.put("passwordx", password);
-        object.put("credential", account);
+        object.put("code", code);
+        object.put("publTime", publTime);
         return object;
     }
 }
