@@ -97,7 +97,7 @@ public abstract class AbstractConnector implements IConnector<Response> {
     @Override
     public ResponseLog<Response> getLog() {
         Optional.ofNullable(response).orElseThrow(() -> new ConnerException("请求响应为空"));
-        Optional.of(response).filter(Response::isSuccessful).orElseThrow(() -> new ConnerException(response.message()));
+        Optional.of(response).filter(Response::isSuccessful).orElseThrow(() -> new HttpException(api.getUrl(), response.message()));
         ResponseLog<Response> log = new ResponseLog<>();
         Optional.ofNullable(api).orElseThrow(() -> new ConnerException("api为空"));
         return log.setStartTime(response.sentRequestAtMillis())

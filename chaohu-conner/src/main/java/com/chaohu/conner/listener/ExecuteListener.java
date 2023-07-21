@@ -81,6 +81,16 @@ public class ExecuteListener implements ITestListener, IClassListener {
     }
 
     @Override
+    public void onTestSkipped(ITestResult result) {
+
+    }
+
+    @Override
+    public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+
+    }
+
+    @Override
     public void onStart(ITestContext iTestContext) {
         System.out.println();
         System.out.println("------------------------------------------开始执行------------------------------------------");
