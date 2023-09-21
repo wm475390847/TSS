@@ -3,7 +3,6 @@ package com.chaohu.conner.http;
 import com.chaohu.conner.config.HttpConfig;
 import com.chaohu.conner.exception.HttpException;
 import com.chaohu.conner.http.connector.IConnector;
-import com.shuwen.openapi.gateway.util.SignHelperV2;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Request;
@@ -172,11 +171,11 @@ public class Api {
      * @return 加签后的url
      */
     private String addSign(Map<String, String> sign, Map<String, String> map) {
-        String signUrl = null;
-        for (Map.Entry<String, String> entry : sign.entrySet()) {
-            signUrl = SignHelperV2.getSignUrl(entry.getKey(), entry.getValue(), map);
-        }
-        return signUrl;
+//        String signUrl = null;
+//        for (Map.Entry<String, String> entry : sign.entrySet()) {
+//            signUrl = SignHelperV2.getSignUrl(entry.getKey(), entry.getValue(), map);
+//        }
+        return null;
     }
 
     /**
