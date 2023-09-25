@@ -1,5 +1,6 @@
 package com.chaohu.conner.http;
 
+import com.chaohu.conner.exception.ConnerException;
 import com.chaohu.conner.exception.HttpException;
 import com.chaohu.conner.http.connector.*;
 import lombok.Getter;
@@ -66,10 +67,10 @@ public enum MethodEnum {
      * @return 对应的MethodEnum
      */
     public static MethodEnum findEnumByType(String methodType) {
-        Optional.ofNullable(methodType).orElseThrow(() -> new HttpException("methodType 不能为空"));
+        Optional.ofNullable(methodType).orElseThrow(() -> new ConnerException("methodType 不能为空"));
         Optional<MethodEnum> any = Arrays.stream(MethodEnum.values())
                 .filter(e -> e.getMethodType().equals(methodType)).findAny();
-        Optional.of(any).filter(Optional::isPresent).orElseThrow(() -> new HttpException("类型不存在"));
+        Optional.of(any).filter(Optional::isPresent).orElseThrow(() -> new ConnerException("类型不存在"));
         return any.get();
     }
 }

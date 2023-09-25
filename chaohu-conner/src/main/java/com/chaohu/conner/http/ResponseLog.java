@@ -1,7 +1,7 @@
 package com.chaohu.conner.http;
 
 import com.alibaba.fastjson.JSONObject;
-import com.chaohu.conner.exception.HttpException;
+import com.chaohu.conner.exception.ConnerException;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import okhttp3.Response;
@@ -35,7 +35,7 @@ public class ResponseLog<T> {
                     this.strResult = (String) response;
                 } else if (response instanceof Response) {
                     ResponseBody responseBody = ((Response) response).body();
-                    Optional.ofNullable(responseBody).orElseThrow(() -> new HttpException("响应体不能为空"));
+                    Optional.ofNullable(responseBody).orElseThrow(() -> new ConnerException("响应体不能为空"));
                     this.strResult = responseBody.string();
                 } else {
                     this.strResult = response.toString();

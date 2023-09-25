@@ -1,7 +1,7 @@
 package com.chaohu.conner.http;
 
 import com.chaohu.conner.config.HttpConfig;
-import com.chaohu.conner.exception.HttpException;
+import com.chaohu.conner.exception.ConnerException;
 import com.chaohu.conner.http.connector.IConnector;
 import com.shuwen.openapi.gateway.util.SignHelperV2;
 import lombok.Getter;
@@ -149,7 +149,7 @@ public class Api {
             sb.append(path);
             str = sb.toString();
         } else {
-            throw new HttpException("URL为空");
+            throw new ConnerException("URL为空");
         }
 
         if (urlParams.isEmpty()) {

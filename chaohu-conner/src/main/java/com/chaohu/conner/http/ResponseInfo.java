@@ -37,6 +37,9 @@ public class ResponseInfo implements Serializable {
     @JSONField(name = "msg")
     private String msg;
 
+    @JSONField(name = "message")
+    private String message;
+
     @JSONField(name = "total")
     private Long total;
 

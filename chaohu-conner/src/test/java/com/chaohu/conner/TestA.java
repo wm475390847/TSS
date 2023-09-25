@@ -43,8 +43,8 @@
 //                .path("/api/dg/finance/visual/zhongzhengbao/q3report/kline")
 //                .method(MethodEnum.POST)
 //                .requestBody(object)
-//                .pure(true)
-//                .build();
+//                .build()
+//                .pure();
 //        Boolean pure = api.getPure();
 //        System.err.println(pure);
 //    }

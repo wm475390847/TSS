@@ -1,7 +1,7 @@
 package com.chaohu.conner.container;
 
 import com.chaohu.conner.config.IConfig;
-import com.chaohu.conner.exception.ContainerException;
+import com.chaohu.conner.exception.ConnerException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +40,7 @@ public abstract class AbstractConfigContainer implements IConfigContainer {
 
     @Override
     public <C extends IConfig> C findConfig(Class<C> config) {
-        Optional.ofNullable(config).orElseThrow(() -> new ContainerException("查询的配置类不能为空"));
+        Optional.ofNullable(config).orElseThrow(() -> new ConnerException("查询的配置类不能为空"));
         Map.Entry<String, IConfig> entry = configMap.entrySet().stream()
                 .filter(e -> e.getKey().equals(config.getSimpleName()))
                 .findFirst().orElse(null);

@@ -12,6 +12,6 @@ import lombok.EqualsAndHashCode;
 public class ListenerException extends RuntimeException {
 
     public ListenerException(String message) {
-        super("监听器错误: [" + message + "]");
+        super("监听异常: [" + message + "]");
     }
 }

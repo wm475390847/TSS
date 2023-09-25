@@ -12,6 +12,6 @@ import lombok.EqualsAndHashCode;
 public class ConnerException extends RuntimeException {
 
     public ConnerException(String message) {
-        super(message);
+        super("测试异常: [" + message + "]");
     }
 }
