@@ -171,6 +171,7 @@ public class Api {
      * @return 加签后的url
      */
     private String addSign(Map<String, String> sign, Map<String, String> map) {
+        //TODO 每个公司加签方式不一样，需要自定义
         return null;
     }
 
