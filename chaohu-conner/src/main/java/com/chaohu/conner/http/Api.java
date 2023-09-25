@@ -136,7 +136,7 @@ public class Api {
      * @return 完整的url
      */
     private String createFullUrl() {
-        String str = null;
+        String str;
         if (url != null) {
             str = url;
         } else if (baseUrl != null && path != null) {
@@ -171,10 +171,6 @@ public class Api {
      * @return 加签后的url
      */
     private String addSign(Map<String, String> sign, Map<String, String> map) {
-//        String signUrl = null;
-//        for (Map.Entry<String, String> entry : sign.entrySet()) {
-//            signUrl = SignHelperV2.getSignUrl(entry.getKey(), entry.getValue(), map);
-//        }
         return null;
     }
 

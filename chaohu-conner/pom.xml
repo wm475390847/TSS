@@ -45,10 +45,6 @@
             <artifactId>testng</artifactId>
         </dependency>
         <!-- 网关参数加签认证 -->
-        <dependency>
-            <groupId>com.shuwen.openapi</groupId>
-            <artifactId>shuwen-openapi-gateway-sdk</artifactId>
-        </dependency>
     </dependencies>
 
 </project>
