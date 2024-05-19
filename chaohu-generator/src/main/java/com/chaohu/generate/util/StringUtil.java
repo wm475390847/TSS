@@ -1,5 +1,7 @@
 package com.chaohu.generate.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -58,8 +60,12 @@ public class StringUtil {
         }
         matcher.appendTail(sb);
         if (firstIsUpperCase) {
-            String s = sb.toString().substring(0, 1).toUpperCase();
-            return s + sb.toString().substring(1, sb.length());
+            if (StringUtils.isNotEmpty(sb.toString())) {
+                String s = sb.substring(0, 1).toUpperCase();
+                return s + sb.substring(1, sb.length());
+            } else {
+                return sb.toString();
+            }
         } else {
             return sb.toString();
         }

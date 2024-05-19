@@ -57,9 +57,12 @@ public class ParseUtil {
             sb.append(StringUtil.firstUpperCase(pathList[i]));
         }
         String name = StringUtil.firstUpperCase(sb.toString());
-        name = name + StringUtil.lineToHump(apiMethod.toLowerCase(), true);
-
-        return apiSuffix == null ? name : name + apiSuffix;
+        if (apiMethod != null) {
+            name = name + StringUtil.lineToHump(apiMethod.toLowerCase(), true);
+        }
+        String className = apiSuffix == null ? name : name + apiSuffix;
+        className = className.replaceAll("[^a-zA-Z]", "");
+        return className;
     }
 
     /**

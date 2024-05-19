@@ -47,6 +47,9 @@ public enum MethodEnum {
      * multipart请求
      */
     MULTIPART("MULTIPART", new MultipartConnector()),
+
+
+    HTML("POST", new HtmlConnector()),
     ;
 
     MethodEnum(String methodType, IConnector<Response> connector) {

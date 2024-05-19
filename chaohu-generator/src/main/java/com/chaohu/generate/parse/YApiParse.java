@@ -4,10 +4,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chaohu.conner.http.ResponseInfo;
 import com.chaohu.conner.http.ResponseLog;
-import com.chaohu.generate.api.InterfaceGetRequest;
-import com.chaohu.generate.api.InterfaceListRequest;
-import com.chaohu.generate.api.InterfaceListCatRequest;
-import com.chaohu.generate.api.ProjectGetRequest;
+import com.chaohu.generate.api.yapi.InterfaceGetRequest;
+import com.chaohu.generate.api.yapi.InterfaceListRequest;
+import com.chaohu.generate.api.yapi.InterfaceListCatRequest;
+import com.chaohu.generate.api.yapi.ProjectGetRequest;
 import com.chaohu.generate.enums.ValTypeEnum;
 import com.chaohu.generate.execption.GeneratorException;
 import com.chaohu.generate.pojo.ApiInfo;
@@ -130,7 +130,7 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
             JSONArray reqHeaders = data.getJSONArray("req_headers");
 
             String contentType;
-            if (reqHeaders.size() != 0) {
+            if (!reqHeaders.isEmpty()) {
                 // post请求的header是有东西的
                 JSONObject header = reqHeaders
                         .stream()
@@ -145,20 +145,20 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
                 contentType = "application/json";
             }
 
-            List<ParamProperty> param;
+            List<ParamProperty> paramProperties;
             JSONObject reqBodyOther = JSONObject.parseObject(data.getString("req_body_other"));
             JSONArray reqQuery = data.getJSONArray("req_query");
 
             if (reqBodyOther != null) {
                 // post请求的参数字段
-                param = parsePropertiesAndRequired(reqBodyOther.getJSONObject("properties"),
+                paramProperties = parsePropertiesAndRequired(reqBodyOther.getJSONObject("properties"),
                         reqBodyOther.getJSONArray("required"));
-            } else if (reqQuery.size() != 0) {
+            } else if (!reqQuery.isEmpty()) {
                 // get请求的参数字段
-                param = parseReqQuery(reqQuery);
+                paramProperties = parseReqQuery(reqQuery);
             } else {
                 JSONArray reqParams = data.getJSONArray("req_params");
-                param = parseReqQuery(reqParams);
+                paramProperties = parseReqQuery(reqParams);
             }
             apiInfo.setRowId(rowId)
                     .setApiPath(path)
@@ -166,8 +166,8 @@ public class YApiParse extends BaseApiParse<ApiInfo> {
                     .setMethod(method)
                     .setApiAuthor(username)
                     .setContentType(contentType)
-                    .setIsCover(false)
-                    .setParam(param);
+                    .setParam(paramProperties)
+                    .setIsCover(false);
         } catch (Exception e) {
             log.error("处理数据错误: {}", e.getMessage());
         }

@@ -24,9 +24,14 @@ public class ApiInfo implements Serializable {
     private String apiName;
 
     /**
-     * 接口列表
+     * 接口路径
      */
     private String apiPath;
+
+    /**
+     * 初始api路径
+     */
+    private String initialAaiPath;
 
     /**
      * 接口后缀
@@ -49,12 +54,12 @@ public class ApiInfo implements Serializable {
     private String method;
 
     /**
-     * 接口描述
+     * 连接方式
      */
     private String contentType;
 
     /**
-     * json字段
+     * 请求参数
      */
     private List<ParamProperty> param;
 
@@ -79,4 +84,23 @@ public class ApiInfo implements Serializable {
     private Integer projectId;
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 处理api路径
+     *
+     * @return 优化后的api路径
+     */
+    public String getApiPath() {
+        String apiPath = this.initialAaiPath.trim();
+        if (apiPath.endsWith("}")) {
+            apiPath = apiPath.substring(0, apiPath.length() - 1);
+        }
+        apiPath = apiPath.replaceAll("[{]", "\" + ");
+        apiPath = apiPath.replaceAll("[}]", " + \"");
+        if (this.initialAaiPath.trim().endsWith("}")) {
+            return "\"" + apiPath;
+        } else {
+            return "\"" + apiPath + "\"";
+        }
+    }
 }

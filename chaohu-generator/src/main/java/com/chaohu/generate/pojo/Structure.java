@@ -2,6 +2,7 @@ package com.chaohu.generate.pojo;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -13,8 +14,14 @@ import java.util.Map;
  * @date 2022/5/17 13:05
  */
 @Data
+@Slf4j
 @Accessors(chain = true)
 public class Structure {
+
+    /**
+     * 父结构路径
+     */
+    private String parentPath;
 
     /**
      * 文件输出路径
@@ -47,7 +54,7 @@ public class Structure {
                 try {
                     map.put(filed.getName(), filed.get(ftlParam));
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    log.error("数据初始胡失败: {}", e.getMessage());
                 }
             });
         }

@@ -1,4 +1,4 @@
-package com.chaohu.generate.api;
+package com.chaohu.generate.api.yapi;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chaohu.conner.http.AbstractHttpRequest;
@@ -14,12 +14,12 @@ import lombok.Builder;
  * @date 2022/5/17 13:05
  */
 @Builder
-public class InterfaceListCatRequest extends AbstractHttpRequest {
+public class InterfaceListRequest extends AbstractHttpRequest {
     @Builder.Default
     private final Integer page = 1;
     @Builder.Default
     private final Integer limit = 20;
-    private final Integer catId;
+    private final Integer projectId;
 
     @Override
     protected Api buildApi() {
@@ -27,10 +27,10 @@ public class InterfaceListCatRequest extends AbstractHttpRequest {
                 .baseUrl(Constant.BASE_URL)
                 .hostname(Constant.HOST)
                 .header("Cookie", Constant.TOKEN)
-                .path("/api/interface/list_cat")
+                .path("/api/interface/list")
                 .urlParamPart("page", page)
                 .urlParamPart("limit", limit)
-                .urlParamPart("catid", catId)
+                .urlParamPart("project_id", projectId)
                 .method(MethodEnum.GET)
                 .build();
     }

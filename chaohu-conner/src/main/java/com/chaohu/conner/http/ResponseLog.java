@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- * ç»“æœæ—¥å¿—
+ * ½á¹ûÈÕÖ¾
  *
  * @author wangmin
  * @date 2022/5/17 13:05
@@ -24,9 +24,9 @@ public class ResponseLog<T> {
     private static final String BLANK = "    ";
 
     /**
-     * è·å–å­—ç¬¦ç±»å‹çš„å“åº”ä½“
+     * »ñÈ¡×Ö·ûÀàĞÍµÄÏìÓ¦Ìå
      *
-     * @return å“åº”ä½“
+     * @return ÏìÓ¦Ìå
      */
     public String getStrResult() {
         if (StringUtils.isEmpty(strResult)) {
@@ -35,22 +35,22 @@ public class ResponseLog<T> {
                     this.strResult = (String) response;
                 } else if (response instanceof Response) {
                     ResponseBody responseBody = ((Response) response).body();
-                    Optional.ofNullable(responseBody).orElseThrow(() -> new ConnerException("å“åº”ä½“ä¸èƒ½ä¸ºç©º"));
+                    Optional.ofNullable(responseBody).orElseThrow(() -> new ConnerException("ÏìÓ¦Ìå²»ÄÜÎª¿Õ"));
                     this.strResult = responseBody.string();
                 } else {
                     this.strResult = response.toString();
                 }
             } catch (IOException e) {
-                this.strResult = "æ—¥å¿—ç»“æœä¸æ”¯æŒå­—ç¬¦ä¸²";
+                this.strResult = "ÈÕÖ¾½á¹û²»Ö§³Ö×Ö·û´®";
             }
         }
         return this.strResult;
     }
 
     /**
-     * è·å–æ˜ å°„ç±»å‹çš„å“åº”ä½“
+     * »ñÈ¡Ó³ÉäÀàĞÍµÄÏìÓ¦Ìå
      *
-     * @return å“åº”ä½“
+     * @return ÏìÓ¦Ìå
      */
     public ResponseInfo getObjResult() {
         String strResult = getStrResult();
@@ -59,9 +59,9 @@ public class ResponseLog<T> {
     }
 
     /**
-     * è·å–å“åº”æ—¶é—´
+     * »ñÈ¡ÏìÓ¦Ê±¼ä
      *
-     * @return æ—¶é—´
+     * @return Ê±¼ä
      */
     public long getResponseTime() {
         return endTime - startTime;
@@ -73,9 +73,9 @@ public class ResponseLog<T> {
     }
 
     /**
-     * æ„å»ºæ—¥å¿—æ ¼å¼
+     * ¹¹½¨ÈÕÖ¾¸ñÊ½
      *
-     * @return æ—¥å¿—
+     * @return ÈÕÖ¾
      */
     private String buildLog() {
         StringBuilder sb = new StringBuilder();

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -47,7 +48,7 @@ public abstract class BaseGenerator<P> implements IGenerator {
                 if (StringUtils.isEmpty(value.getOutputPath()) && StringUtils.isEmpty(value.getClassName())) {
                     return;
                 }
-                String outputPath = value.getOutputPath();
+                String outputPath = value.getOutputPath() + "/" + value.getParentPath() + "/";
                 File file = new File(outputPath);
                 if (!file.exists()) {
                     log.info("开始创建文件所在文件夹 :{}", outputPath);
@@ -64,11 +65,12 @@ public abstract class BaseGenerator<P> implements IGenerator {
                     // step4 加载模版文件
                     Map<String, Object> dataMap = value.initDataMap();
                     // step5 生成数据
-                    File docFile = new File(outputPath + value.getClassName() + FileFormatEnum.findBySuffix(value.getFileSuffix()).getSuffix());
+                    File docFile = new File(outputPath + value.getClassName()
+                            + FileFormatEnum.findBySuffix(value.getFileSuffix()).getSuffix());
                     String info = !docFile.exists() ? writerFile(template, dataMap, docFile) : "文件已存在 !";
                     log.info("----------{}----------", info);
                 } catch (IOException | TemplateException e) {
-                    e.printStackTrace();
+                    log.error("文件生成失败: {}", e.getMessage());
                 }
             }
         });
@@ -84,7 +86,7 @@ public abstract class BaseGenerator<P> implements IGenerator {
      */
     private String writerFile(Template template, Map<String, Object> dataMap, File docFile) throws TemplateException, IOException {
         //增强try，自动关闭资源，被自动关闭的资源必须实现Closeable或AutoCloseable接口
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(docFile)))) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(docFile.toPath())))) {
             template.process(dataMap, writer);
         }
         return "恭喜~ 文件创建成功 !";

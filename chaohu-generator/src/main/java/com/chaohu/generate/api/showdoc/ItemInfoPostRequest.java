@@ -1,4 +1,4 @@
-package com.chaohu.generate.api;
+package com.chaohu.generate.api.showdoc;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chaohu.conner.http.AbstractHttpRequest;
@@ -8,14 +8,15 @@ import com.chaohu.generate.pojo.Constant;
 import lombok.Builder;
 
 /**
- * 活动列表接口
+ * 项目详情接口
  *
  * @author wangmin
  * @date 2022/5/17 13:05
  */
 @Builder
-public class ProjectGetRequest extends AbstractHttpRequest {
-    private final Integer projectId;
+public class ItemInfoPostRequest extends AbstractHttpRequest {
+    private final String s;
+    private String itemId;
 
     @Override
     protected Api buildApi() {
@@ -23,11 +24,15 @@ public class ProjectGetRequest extends AbstractHttpRequest {
                 .baseUrl(Constant.BASE_URL)
                 .hostname(Constant.HOST)
                 .header("Cookie", Constant.TOKEN)
-                .urlParamPart("id", projectId)
-                .path("api/project/get")
-                .method(MethodEnum.GET)
+                .contentType("text/html")
+                .path("/server/index.php")
+                .formDataPart("item_id", itemId)
+                .formDataPart("default_page_id", "0")
+                .urlParamPart("s", s)
+                .method(MethodEnum.HTML)
                 .build();
     }
+
 
     @Override
     protected JSONObject buildBody() {
