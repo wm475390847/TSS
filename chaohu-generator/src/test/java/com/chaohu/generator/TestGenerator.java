@@ -7,9 +7,6 @@ import com.chaohu.generate.parse.ShowDocParse;
 import com.chaohu.generate.pojo.ApiInfo;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TestGenerator {
 
     @Test
@@ -25,17 +22,9 @@ public class TestGenerator {
                 .parentIndex(3)
                 .templateName("apiTemplate.ftl")
                 .templatePath("src/main/resources/template")
-                .outputPath("src/main/java/com/chaohu/generate/tmp/generator")
+                .outputPath("src/main/java/com/chaohu/generate/tmp")
                 .build();
         generator.load();
         generator.execute();
-    }
-
-    @Test
-    public void test1() {
-        List<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("1");
-        System.err.println(list);
     }
 }

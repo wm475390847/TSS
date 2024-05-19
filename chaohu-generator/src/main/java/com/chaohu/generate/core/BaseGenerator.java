@@ -48,7 +48,8 @@ public abstract class BaseGenerator<P> implements IGenerator {
                 if (StringUtils.isEmpty(value.getOutputPath()) && StringUtils.isEmpty(value.getClassName())) {
                     return;
                 }
-                String outputPath = value.getOutputPath() + "/" + value.getParentPath() + "/";
+                System.err.println(value.getOutputPath());
+                String outputPath = value.getOutputPath() + value.getParentPath() + "/";
                 File file = new File(outputPath);
                 if (!file.exists()) {
                     log.info("开始创建文件所在文件夹 :{}", outputPath);
