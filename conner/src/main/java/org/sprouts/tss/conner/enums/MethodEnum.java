@@ -3,7 +3,7 @@ package org.sprouts.tss.conner.enums;
 import org.sprouts.tss.conner.exception.ConnerException;
 import lombok.Getter;
 import okhttp3.Response;
-import org.sprouts.tss.conner.http.*;
+import org.sprouts.tss.conner.http.client.*;
 
 import java.util.Arrays;
 import java.util.Optional;
