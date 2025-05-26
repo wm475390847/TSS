@@ -4,6 +4,7 @@ import org.sprouts.tss.conner.test.collector.ICollector;
 import org.sprouts.tss.conner.core.config.IConfigContainer;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -28,8 +29,9 @@ public class Context {
                                 .filter(value -> !value.equals(ICollector.class))
                                 .map(value -> {
                                     try {
-                                        return Collections.singletonMap(anno, value.newInstance());
-                                    } catch (InstantiationException | IllegalAccessException e) {
+                                        return Collections.singletonMap(anno, value.getDeclaredConstructor().newInstance());
+                                    } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                                             InvocationTargetException e) {
                                         log.error("收集器获取错误: {}", e.getMessage());
                                         return null;
                                     }
