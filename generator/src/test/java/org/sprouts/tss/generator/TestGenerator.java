@@ -11,11 +11,11 @@ import org.testng.annotations.Test;
 public class TestGenerator {
     @Test
     public void test() {
-        String cookie = "cookie_token=d91860ab4610429d471f447ebfe4c2d62162b9edbc531a85bce2ab041539eb8f";
+        String cookie = "";
         ShowDocParse<ApiInfo> parse = new ShowDocParse.Builder()
                 .suffix("Request")
                 .token(cookie)
-                .baseUrl("http://codewave-api.netease.com")
+                .baseUrl("")
                 .build();
         IGenerator generator = new ShowDocGenerator.Builder()
                 .parse(parse)
@@ -31,7 +31,7 @@ public class TestGenerator {
     public void test1() {
         JsonParse<ApiInfo> jsonParse = new JsonParse.Builder()
                 .suffix("Request")
-                .filePath("/Users/wangmin/Downloads/开放平台凭证管理.json")
+                .filePath("/Users/wangmin/Downloads/xxx.json")
                 .build();
         IGenerator generator = new JsonGenerator.Builder()
                 .parse(jsonParse)
