@@ -22,7 +22,7 @@ public class TestGenerator {
                 .parentPathIndex(3)
                 .templatePath("src/main/resources/template")
                 .templateName("apiTemplate.ftl")
-                .outputPath("src/main/java/com/netease/codewave/quality/tmp")
+                .outputPath("xxx/tmp")
                 .build();
         generator.load().execute();
     }
@@ -38,7 +38,7 @@ public class TestGenerator {
                 .parentPathIndex(3)
                 .templatePath("src/main/resources/template")
                 .templateName("apiTemplate.ftl")
-                .outputPath("src/main/java/com/netease/codewave/quality/tmp")
+                .outputPath("xxx/tmp")
                 .build();
         generator.load().execute();
     }
